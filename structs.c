@@ -1,11 +1,15 @@
 //Bibliotecas relevantes para o progama
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 //Constantes estabelicdas no enunciado
 #define dim 30
 #define h 10
 #define d 5
+
+void exibeStr(char *);
+
 
 typedef struct {
     char nome[dim];
@@ -20,11 +24,11 @@ typedef struct {
     long int fone;
     int idade;
     char medico[dim];
-} cliente; 
+} cliente;
 
 
 void preencheMedicos( agMedico *pessoa){
-    
+
     char lixo;
     printf("Digite o nome do médico: ");
     for(int i = 0; pessoa->nome[i-1] != '\n'; i++){
@@ -40,10 +44,16 @@ void preencheMedicos( agMedico *pessoa){
         scanf("%c", &pessoa->especialidade[i]);
     }
     printf("\n");
-
-
 }
 
 typedef struct {
     char nome[dim];
 } test;
+
+void exibeStr(char *str){
+  printf("minha rola\n" );
+
+  for(int i = 0; str[i] != '\0'; i++)
+    printf("%c", str[i]);
+
+}

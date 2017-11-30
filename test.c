@@ -1,11 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "structs.c"
+#include "consultas.c"
 
 int main(){
     agMedico lucas;
     int fim;
 
+    leitura();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
     preencheMedicos(&lucas);
 
 
@@ -19,15 +50,15 @@ int main(){
         printf("%c", lucas.especialidade[i]);
     }
 
-    
+
     //Aparentemente é necessário por esse expoço para evitar
     //a exibição de "lixo" que esta na memoria
     printf("\n");
-   /* printf("tortona\n");
+    printf("tortona\n");
 
     printf("\n");
 
-   
+
     for(int i = 0; i < dim; i++){
         scanf("%c", &lucas.nome[i]);
 
@@ -40,14 +71,14 @@ int main(){
 
     printf("\n");
 
-    
-    
- 
+
+
+
     for(int i; i < dim; i++){
         printf("%c", lucas.nome[i]);
     }
 
-    
+
     */
 
     return 0;
