@@ -1,10 +1,25 @@
+//1. MARCAÇÃO SEMANAL CONSULTAS
+
 //Bibliotecas necessárias
 #include <stdio.h>
 #include <stdlib.h>
 
 //Aquivos necessarios
+//descide q será mais organizado trabalhar
+//criando varios arquivos e importando
+//suas funcoes nos outros arquivos
+//pois assim poderemos modualizar melhor
 #include "structs.c"
 
+//Funcoes feitas nesse arquivo
+void linhaEspecifica(FILE *, int , char *);
+void pedirLinha(FILE *, char *);
+void leitura();
+
+//Essa função ira ler uma linha especifica do codigo
+//o objetivo e extrair as linhas q tem os horarios
+//e dias de atendimento de um medico X para montar
+//o calendario dele o q é a primeira questãoo da lista
 void linhaEspecifica(FILE *medico, int linha, char *str){
   int contador = 0;
   char lixo[50];
@@ -22,13 +37,18 @@ void linhaEspecifica(FILE *medico, int linha, char *str){
 
 }
 
-
+//Essa aqui é so para chamar a função de cima e poluir
+//menos a função principal desse arquivo
 void pedirLinha(FILE *medico, char *str){
   scanf("%d", linha);
   linhaEspecifica(medico, linha, str);
 }
 
 //funcao para criar a tabela de horarios
+//Essa é a função principal desse arquivo
+//nela se pretende realizar a função de 
+//extrair as datas e horarios de um medico X
+//e converter em um calendario
 void leitura(){
   //variaveis
   FILE *medico;

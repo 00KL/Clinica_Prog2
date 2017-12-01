@@ -9,8 +9,9 @@
 #define d 5
 
 void exibeStr(char *);
+void preencheMedicos(agMedico * );
 
-
+//Tipo definido no enunciado
 typedef struct {
     char nome[dim];
     int id;
@@ -18,6 +19,7 @@ typedef struct {
     int agenda[h][d];
 } agMedico;
 
+//Tipo definido no enunciado
 typedef struct {
    char nome[dim];
     int id;
@@ -26,7 +28,12 @@ typedef struct {
     char medico[dim];
 } cliente;
 
-
+//Forma de preencher o medico em questão
+//ate o momento n encontrei uma utilidade
+//ja q ao acabar de ler o enunciado eu notei
+//q registrar medico n é uma funcao 
+//q precisa ser feita
+//mas n apaga pq pode ser util
 void preencheMedicos( agMedico *pessoa){
 
     char lixo;
@@ -46,10 +53,17 @@ void preencheMedicos( agMedico *pessoa){
     printf("\n");
 }
 
+
+//Apenas um tipo para testes
+//ja que eu n estava domindo bem as tecnicas de struct
 typedef struct {
     char nome[dim];
 } test;
 
+//N será necessário exibir para o usuário
+//uma string, porem para nos será importante
+//para testar os valores q estão sendo registrados
+//nos campos de uma string
 void exibeStr(char *str){
   printf("minha rola\n" );
 
