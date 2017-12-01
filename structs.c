@@ -8,9 +8,6 @@
 #define h 10
 #define d 5
 
-void exibeStr(char *);
-void preencheMedicos(agMedico * );
-
 //Tipo definido no enunciado
 typedef struct {
     char nome[dim];
@@ -31,17 +28,26 @@ typedef struct {
 //Forma de preencher o medico em questão
 //ate o momento n encontrei uma utilidade
 //ja q ao acabar de ler o enunciado eu notei
-//q registrar medico n é uma funcao 
+//q registrar medico n é uma funcao
 //q precisa ser feita
 //mas n apaga pq pode ser util
 void preencheMedicos( agMedico *pessoa){
+    //anuncio da varaivel q ira receber
+    //o endereco do arquivo
+    FILE *arq;
+    //varaivel
+    char lixo, str[dim];
 
-    char lixo;
-    printf("Digite o nome do médico: ");
-    for(int i = 0; pessoa->nome[i-1] != '\n'; i++){
-        scanf("%c", &pessoa->nome[i]);
+    //leitura do arquivo dos medicos
+    arq = fopen("dados/dadosMedicos.txt", "r");
+
+    fgets(str, 30, arq);
+
+    for(int i = 0; i < 30 ; i++){
+         pessoa->nome[i] = str[i];
     }
 
+    /*
     printf("Digite o codigo do médico: ");
     scanf("%d", &pessoa->id);
     scanf("%c",&lixo);
@@ -50,7 +56,7 @@ void preencheMedicos( agMedico *pessoa){
     for(int i = 0; pessoa->especialidade[i-1] != '\n'; i++){
         scanf("%c", &pessoa->especialidade[i]);
     }
-    printf("\n");
+    printf("\n");*/
 }
 
 

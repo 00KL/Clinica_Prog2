@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 //Aquivos necessarios
 //descide q será mais organizado trabalhar
 //criando varios arquivos e importando
@@ -11,10 +12,10 @@
 //pois assim poderemos modualizar melhor
 #include "structs.c"
 
+/*
 //Funcoes feitas nesse arquivo
 void linhaEspecifica(FILE *, int , char *);
 void pedirLinha(FILE *, char *);
-void leitura();
 
 //Essa função ira ler uma linha especifica do codigo
 //o objetivo e extrair as linhas q tem os horarios
@@ -46,7 +47,7 @@ void pedirLinha(FILE *medico, char *str){
 
 //funcao para criar a tabela de horarios
 //Essa é a função principal desse arquivo
-//nela se pretende realizar a função de 
+//nela se pretende realizar a função de
 //extrair as datas e horarios de um medico X
 //e converter em um calendario
 void leitura(){
@@ -67,3 +68,4 @@ void leitura(){
   //exibeStr(str1);
 
 }
+*/

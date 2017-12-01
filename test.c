@@ -6,40 +6,11 @@ int main(){
     agMedico lucas;
     int fim;
 
-    leitura();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
     preencheMedicos(&lucas);
 
+    exibeStr(lucas.nome);
 
+    /*
     for(int i = 0; lucas.nome[i] != '\0'; i++){
         printf("%c", lucas.nome[i]);
     }
@@ -78,8 +49,6 @@ int main(){
         printf("%c", lucas.nome[i]);
     }
 
-
     */
-
     return 0;
 }
