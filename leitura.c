@@ -13,7 +13,7 @@
 #include "exibe.c"
 
 //Funcoes desse codigo
-void preencheMedicos( agMedico *, FILE *, FILE *);
+void preencheMedicos( agMedico *, FILE *, FILE *, char *);
 void inserirValor(char *, agMedico *);
 void criaArquivoMedico(FILE *, agMedico *, FILE *, char *, char *);
 void dadosMedico(FILE *, agMedico *, FILE *, char *);
@@ -21,10 +21,8 @@ void preencheMedicosFILHADAPUTAVAISEFUDER( agMedico *, FILE *, FILE *);
 
 
 void procuraMedico(agMedico *medico ){
-    
-    char lixo[dim];
-    int lixo1;
-    char str[dim], nomeArq[dim+4];
+
+    char str[dim] = {0}, nomeArq[dim+4];
 
     FILE *arqEntrada, *arqSaida;
 
@@ -32,35 +30,44 @@ void procuraMedico(agMedico *medico ){
         exit(1);
     }
 
+    fgets(str,  30, arqEntrada);
+    while(str[0] != '\n'){
+      //printf("rola tortona");
+      preencheMedicos(medico, arqEntrada, arqSaida, str);
+      fgets(str,  30, arqEntrada);
+    }
+
     //preencheMedicos(medico, arqEntrada, arqSaida);
-    preencheMedicos(medico, arqEntrada, arqSaida);
-    preencheMedicos(medico, arqEntrada, arqSaida);
-    preencheMedicos(medico, arqEntrada, arqSaida);
+    //preencheMedicos(medico, arqEntrada, arqSaida);
+    //preencheMedicos(medico, arqEntrada, arqSaida);
+    //preencheMedicos(medico, arqEntrada, arqSaida);
 }
 
-void preencheMedicos( agMedico *medico, FILE *arqEntrada, FILE *arqSaida){
+void preencheMedicos( agMedico *medico, FILE *arqEntrada, FILE *arqSaida, char *str){
     //anuncio da varaivel q ira receber
     //o endereco do arquivo
 
     //varaivel
-    char str[dim] = {0}, nomeArq[dim+4] = {0};
+    char /*str[dim] = {0},*/ nomeArq[dim+4] = {0};
+
+    //fgets(str,  30, arqEntrada);
 
 
     //funcao para criar arquivo com o nome do medico
     criaArquivoMedico(arqEntrada, medico, arqSaida, str, nomeArq);
-    
+
     if (!(arqSaida = fopen (nomeArq, "w"))){
         printf("test \n");
         exit(1);
     }
 
     //funcao para incerir dados do medico
-    dadosMedico(arqEntrada, medico, arqSaida, str);    
-    
-    //Colocar e gerar horarios 
+    dadosMedico(arqEntrada, medico, arqSaida, str);
+
+    //Colocar e gerar horarios
     colocar(arqEntrada, medico, arqSaida, str);
-    //fgets(str, 30, arqEntrada);
-    //printf("%s", str);
+
+
 
 }
 
@@ -72,7 +79,7 @@ void inserirValor(char *str, agMedico *medico){
 
     //exibeMatriz(medico);
 
-    
+
     for(int ho = 4; ho < 11 ; ho+=3){
         for(int i = 0; i < h; i++){
             //printf("%d\n", '10' );
@@ -84,7 +91,7 @@ void inserirValor(char *str, agMedico *medico){
         }
 
     }
-    
+
 
     //exibeMatriz(medico);
 
@@ -92,9 +99,9 @@ void inserirValor(char *str, agMedico *medico){
 }
 
 void criaArquivoMedico(FILE *arqEntrada, agMedico *medico, FILE *arqSaida, char *str, char *str1){
-    
+
     //retira nome do arquivo
-    fgets(str, 30, arqEntrada);
+    //fgets(str, 30, arqEntrada);
     //printf("%s ", str );
 
     //exibeStr(str);
@@ -103,11 +110,12 @@ void criaArquivoMedico(FILE *arqEntrada, agMedico *medico, FILE *arqSaida, char 
     strcat(str1, str);
     retiraInterrogacao(str1);
     strcat(str1, ".txt");
+    printf("%s ", str1 );
 
     //Cria arquivo
     //arqSaida = fopen (str1, "w");
-    
-    
+
+
     //coloca nome em pessoa
     for(int i = 0; i < 30 ; i++){
          medico->nome[i] = str[i];
@@ -115,7 +123,7 @@ void criaArquivoMedico(FILE *arqEntrada, agMedico *medico, FILE *arqSaida, char 
 }
 
 void dadosMedico(FILE *arqEntrada, agMedico *medico, FILE *arqSaida, char *str){
-    
+
     fprintf(arqSaida, "%s", str);
 
     fgets(str, 30, arqEntrada);

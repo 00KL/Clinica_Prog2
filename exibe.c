@@ -34,7 +34,7 @@ void exibeStr(char *str){
 
 
     for(int ho = 0; ho < h; ho++){
-        
+
         horas(ho);
 
         for(int di = 0; di < d; di++){//printf("%d    ", medico->agenda[di][ho]);
@@ -78,9 +78,9 @@ void horas(int hora, FILE *arqSaida){
 
 void preencheMatriz(agMedico *medico){
     for(int ho = 0; ho < h; ho++){
-        
+
         for(int di = 0; di < d; di++){
-            
+
             medico->agenda[ho][di] = 0;
             if(ho == 4){
                 medico->agenda[ho][di] = -1;
@@ -100,69 +100,70 @@ void colocar(FILE *arqEntrada, agMedico *medico, FILE *arqSaida, char *str){
 
     semanas(medico, arqSaida, semana);
 
+
 }
 
 void colocarValor(agMedico *medico, int *posicao, int indice, int cont){
-    
+
     for(int i = 0; i < cont ; i++ ){
         medico->agenda[posicao[i]][indice] = -1;
     }
-    
+
 }
 
 void extrair(char *str, int *posicao, int *cont){
 
-    for(int i = 4; str[i-2] != '\n'; i += 3){ 
+    for(int i = 4; str[i-2] != '\n'; i += 3){
         switch(str[i]){
-            case '8': 
+            case '8':
                 posicao[*cont] = 0;
                 *cont+= 1;
                 break;
-            case '9': 
+            case '9':
                 posicao[*cont] = 1;
                 *cont+= 1;
                 break;
-            case '0': 
+            case '0':
                 posicao[*cont] = 2;
                 *cont+=1;
                 break;
-            case '1': 
+            case '1':
                 posicao[*cont] = 3;
                 *cont+=1;
                 break;
-            case '2': 
+            case '2':
                 posicao[*cont] = 4;
                 *cont+=1;
                 break;
-            case '3': 
+            case '3':
                 posicao[*cont] = 5;
                 *cont+=1;
                 break;
-            case '4': 
+            case '4':
                 posicao[*cont] = 6;
                 *cont+=1;
                 break;
-            case '5': 
+            case '5':
                 posicao[*cont] = 7;
                 cont+=1;
                 break;
-            case '6': 
+            case '6':
                 posicao[*cont] = 8;
                 *cont+=1;
                 break;
-            case '7': 
+            case '7':
                 posicao[*cont] = 9;
                 *cont+=1;
                 break;
         }
-        
+
     }
-    
+
 
 }
 
 void colocarValores(agMedico *medico, int *posicao, int indice, int cont, FILE *arqEntrada, char *str){
-    
+
     fgets(str, 30, arqEntrada);
 
     indice = str[0] - 50;
@@ -173,11 +174,11 @@ void colocarValores(agMedico *medico, int *posicao, int indice, int cont, FILE *
 }
 
 void buscaHorarios(agMedico *medico,int *posicao,int indice, int cont, FILE *arqEntrada, char *str){
-    
+
     char check = 'q';
 
     while(check != '\n'){
-        
+
         colocarValores(medico, posicao, indice, cont, arqEntrada, str);
         check = str[0];
     }
@@ -192,9 +193,9 @@ void escreveMatriz(agMedico *medico, FILE *arqSaida, int semana){
     fprintf(arqSaida, "\n        2a   3a   4a   5a   6a\n" );
 
 
-    
+
     for(int ho = 0; ho < h; ho++){
-        
+
         horas(ho, arqSaida);
 
         for(int di = 0; di < d; di++){//printf("%d    ", medico->agenda[di][ho]);
@@ -208,7 +209,7 @@ void escreveMatriz(agMedico *medico, FILE *arqSaida, int semana){
         }
         fprintf(arqSaida, "\n");
     }
-    
+
 }
 
 void semanas(agMedico *medico, FILE *arqSaida, int semana){
