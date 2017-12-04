@@ -1,16 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "consultas.c"
+#include "leitura.c"
 
 int main(){
     agMedico lucas;
-    int fim;
 
-    preencheMedicos(&lucas);
+    FILE *arqSaida, *arqEntrada;
 
-    exibeStr(lucas.nome);
+    procuraMedico(&lucas);
+    
+    return 0;
+}
 
-    /*
+
+
+
+/*
     for(int i = 0; lucas.nome[i] != '\0'; i++){
         printf("%c", lucas.nome[i]);
     }
@@ -50,5 +55,3 @@ int main(){
     }
 
     */
-    return 0;
-}
