@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include "procuraMedicos.c"
 
+void finalDeArquivo(FILE *);
+
+
 int main(){
     agMedico lucas;
 
@@ -9,5 +12,25 @@ int main(){
 
     procuraMedico(&lucas);
 
+    //finalDeArquivo(arqEntrada);
+
     return 0;
+}
+
+void finalDeArquivo(FILE *arqEntrada){
+  char test[dim];
+
+  if (!(arqEntrada = fopen("entrada/dadosMedicos.txt", "r"))){
+      exit(1);
+  }
+
+
+
+  while(!feof(arqEntrada)){
+    fgets(test, 30, arqEntrada);
+    printf("%s \n", test);
+  }
+
+
+
 }

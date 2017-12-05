@@ -26,13 +26,13 @@ void procuraMedico(agMedico *medico ){
 
     FILE *arqEntrada, *arqSaida;
 
-    if (!(arqEntrada = fopen("dadosMedicos.txt", "r"))){
+    if (!(arqEntrada = fopen("entrada/dadosMedicos.txt", "r"))){
         exit(1);
     }
 
     fgets(str, 30, arqEntrada);
 
-    while(str[0] != '\n'){
+    while(/*str[0] != '\n'*/ !(feof(arqEntrada))){
       preencheMedicos(medico, arqEntrada, arqSaida, str);
       fgets(str, 30, arqEntrada);
     }
@@ -44,7 +44,7 @@ void preencheMedicos( agMedico *medico, FILE *arqEntrada, FILE *arqSaida, char *
     //o endereco do arquivo
 
     //variavel
-    char nomeArq[dim+4] = {0};
+    char nomeArq[dim+10] = {0};
 
 
     //funcao para criar arquivo com o nome do medico
@@ -67,6 +67,7 @@ void preencheMedicos( agMedico *medico, FILE *arqEntrada, FILE *arqSaida, char *
 void criaArquivoMedico(FILE *arqEntrada, agMedico *medico, FILE *arqSaida, char *str, char *str1){
 
     //Coloca .txt no final do arquivo
+    strcat(str1, "saida/");
     strcat(str1, str);
     retiraInterrogacao(str1);
     strcat(str1, ".txt");

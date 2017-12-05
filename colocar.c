@@ -51,7 +51,7 @@ void buscaHorarios(agMedico *medico,int *posicao,int indice, int cont, FILE *arq
         colocarValores(medico, posicao, indice, cont, arqEntrada, str);
         check = str[0];
 
-    } while(check != '\n');
+    } while(check != '\n' && !feof(arqEntrada) );
 }
 
 void semanas(agMedico *medico, FILE *arqSaida, int semana){
