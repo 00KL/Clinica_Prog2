@@ -21,12 +21,14 @@ int pacienteMedico(agMedico *medico, FILE *dadosPacientes){
   char nomeMedico[dim],lixo[1];
   int id;
 
-  fgets(lixo, 30, dadosPacientes);
+  fscanf(dadosPacientes,"%s\n%d\n%s\n%s\n%s\n", &lixo, &id, &lixo, &lixo, &nomeMedico);
+
+  /*fgets(lixo, 30, dadosPacientes);
   fscanf(dadosPacientes, "%d", &id);
   fgets(lixo, 30, dadosPacientes);
   fgets(lixo, 30, dadosPacientes);
   fgets(lixo, 30, dadosPacientes);
-  fgets(nomeMedico, 30, dadosPacientes);
+  fgets(nomeMedico, 30, dadosPacientes);*/
 
   if(!(strcmp(nomeMedico, medico->nome))){
     return id;
