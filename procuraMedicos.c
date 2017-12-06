@@ -32,7 +32,8 @@ void procuraMedico(agMedico *medico ){
 
     fgets(str, 30, arqEntrada);
 
-    while(/*str[0] != '\n'*/ !(feof(arqEntrada))){
+
+    while(!(feof(arqEntrada))){
       preencheMedicos(medico, arqEntrada, arqSaida, str);
       fgets(str, 30, arqEntrada);
     }
@@ -42,7 +43,8 @@ void procuraMedico(agMedico *medico ){
 void preencheMedicos( agMedico *medico, FILE *arqEntrada, FILE *arqSaida, char *str){
     //anuncio da variavel q ira receber
     //o endereco do arquivo
-
+    //printf("%s\n",str);
+    strcpy(medico->nome,str);
     //variavel
     char nomeArq[dim+10] = {0};
 
@@ -58,6 +60,7 @@ void preencheMedicos( agMedico *medico, FILE *arqEntrada, FILE *arqSaida, char *
     //funcao para incerir dados do medico
     dadosMedico(arqEntrada, medico, arqSaida, str);
 
+    //printf("%s", medico->nome);
     //Colocar e gerar horarios
     colocar(arqEntrada, medico, arqSaida, str);
 
@@ -76,6 +79,7 @@ void criaArquivoMedico(FILE *arqEntrada, agMedico *medico, FILE *arqSaida, char 
 
 void dadosMedico(FILE *arqEntrada, agMedico *medico, FILE *arqSaida, char *str){
 
+    
     fprintf(arqSaida, "%s", str);
 
     fgets(str, 30, arqEntrada);
