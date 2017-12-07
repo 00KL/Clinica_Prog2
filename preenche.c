@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "structs.c"
+#include "semanas.c"
 
-void preencheMedico(agMedico *, FILE *, FILE *);
+void preencheMedico(agMedico *, FILE *, FILE *, FILE *);
 
 void diasOcupados(agMedico *, FILE *);
 void preencheMatriz(agMedico *);
@@ -20,24 +20,35 @@ int testA(char *, char *);
 
 
 void preencheMedi(agMedico *medico, FILE *arqMedico, FILE *arqLista){
-    char str[dim];
-    
+    //char str[dim];
+
     //fgets(str, 30, arqMedico);
+
+    FILE *arqSaida;
+
+    if (!(arqSaida = fopen ("saida/Joao Silva da Costa.txt", "r"))){
+        printf("ERRO \n");
+        exit(1);
+    }
 
 
     //while(!(feof(arqMedico))){
-      //preencheMedico(medico, arqMedico, arqLista);
-      //fgets(str, 30, arqMedico);
-      //printf("\n\n\n");
+
+      if (!(arqLista = fopen ("entrada/listaPacientes­Semana1.txt", "r"))){
+          printf("ERRO \n");
+          exit(1);
+      }
+
+      preencheMedico(medico, arqMedico, arqLista, arqSaida);
+
+      fclose(arqLista);
+      printf("\n\n\n");
     //}
-
-    
-
 
 }
 
-void preencheMedico(agMedico *medico, FILE *arqMedico, FILE *arqLista){
-    
+void preencheMedico(agMedico *medico, FILE *arqMedico, FILE *arqLista, FILE *arqSaida){
+
     fgets(medico->nome, dim, arqMedico);
 
     fscanf(arqMedico, "%d\n", &medico->id);
@@ -52,6 +63,7 @@ void preencheMedico(agMedico *medico, FILE *arqMedico, FILE *arqLista){
 
     exebeMatriz(medico);
 
+    escreveMatriz(medico, arqSaida, 1);
 }
 
 void preencheMatriz(agMedico *medico){
@@ -64,7 +76,7 @@ void preencheMatriz(agMedico *medico){
             }else{
                 medico->agenda[ho][di] = 0;
             }
-            
+
         }
     }
 }
@@ -72,13 +84,13 @@ void preencheMatriz(agMedico *medico){
 void diasOcupados(agMedico *medico, FILE *arqMedico){
 
     int dia, hora;
-    char lixo,  check;
+    char check;
 
-    
+
         fscanf(arqMedico, "%d", &dia);
     do{
 
-        fscanf(arqMedico, "%c%c", &lixo, &lixo);
+        fscanf(arqMedico, "a ");
 
         do{
 
@@ -89,13 +101,13 @@ void diasOcupados(agMedico *medico, FILE *arqMedico){
             //printf("%d %d \n", hora, dia);
 
         }while(check != '\n');
-        
+
         fscanf(arqMedico, "%c", &check);
 
         dia = check - 48;
 
     }while(check != '\n');
-    
+
 
 }
 
@@ -114,8 +126,8 @@ void exebeMatriz(agMedico *medico){
 
                 printf("%d ", medico->agenda[ho][di]);
             }
-            
-            
+
+
         }
         printf("\n");
     }
@@ -141,7 +153,7 @@ void aleatorio(agMedico *medico, int id, char *nome){
     }else{
         medico->agenda[dia][hora] = id;
     }
-    
+
 }
 
 void nomeLista(FILE *arqLista, char *nomeMedico, char *lixo, int *id){
@@ -169,7 +181,7 @@ void nomesListas(FILE *arqLista, agMedico *medico){
             //printf("%s %s\n" , nomeMedico, medico->nome);
             aleatorio(medico, id, nomeMedico);
         }
-        
+
         fgets(lixo, 30, arqLista);
     }
 }

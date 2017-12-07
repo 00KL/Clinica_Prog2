@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "procuraMedicos.c"
-
+//#include "procuraMedicos.c"
+#include "preenche.c"
 
 void finalDeArquivo(FILE *);
 
@@ -17,13 +17,9 @@ int main(){
         exit(1);
     }
 
-     if (!(arqLista = fopen ("entrada/listaPacientes­Semana2.txt", "r"))){
-        printf("ERRO \n");
-        exit(1);
-    }
 
 
-    preencheMedico(&lucas, arqEntrada, arqLista);
+    preencheMedi(&lucas, arqEntrada, arqLista);
     //preencheMedico(&lucas, arqEntrada, arqLista);
     //preencheMedico(&lucas, arqEntrada, arqLista);
 
@@ -31,7 +27,7 @@ int main(){
 
 
     //nomesListas(arqEntrada &lucas);
-    
+
 
 
     //procuraMedico(&lucas);
@@ -55,4 +51,3 @@ void finalDeArquivo(FILE *arqEntrada){
     printf("%s \n", test);
   }
 }
-
