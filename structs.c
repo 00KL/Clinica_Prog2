@@ -8,7 +8,6 @@
 #define h 10
 #define d 5
 
-
 //Tipo definido no enunciado
 typedef struct {
     char nome[dim];
@@ -16,8 +15,6 @@ typedef struct {
     char especialidade[dim];
     int agenda[h][d];
 } agMedico;
-
-
 
 
 //Tipo definido no enunciado

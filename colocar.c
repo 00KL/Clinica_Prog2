@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "structs.c"
+#include "preenche.c"
 #include "semanas.c"
 #include "buscaHorarios.c"
 
@@ -13,7 +13,7 @@
 
 //funcoes
 void colocar(FILE *, agMedico *, FILE *, char *);
-void preencheMatriz(agMedico *medico);
+//void preencheMatriz(agMedico *medico);
 void buscaHorarios(agMedico *, int *, int , int ,FILE *, char *);
 void semanas(agMedico *, FILE *, int);
 int pacienteMedico(agMedico *, FILE *);
@@ -25,7 +25,7 @@ void colocar(FILE *arqEntrada, agMedico *medico, FILE *arqSaida, char *str){
 
     int indice, posicao[h], cont = 0, semana;
 
-    preencheMatriz(medico);
+    //preencheMatriz(medico);
 
     buscaHorarios(medico, posicao, indice, cont, arqEntrada, str);
 
@@ -87,6 +87,7 @@ int compStr(char *str1, char *str2){
   return 0;
 }
 
+/*
 void preencheMatriz(agMedico *medico){
   int teste;
 
@@ -101,7 +102,7 @@ void preencheMatriz(agMedico *medico){
         for(int di = 0; di < d; di++){
             if(!feof(dados)){
                 //printf("%s",medico->nome);
-                medico->agenda[ho][di] = pacienteMedico(medico,dados);
+                //medico->agenda[ho][di] = pacienteMedico(medico,dados);
 
 
                       //teste = pacienteMedico(medico,dados);
@@ -111,14 +112,14 @@ void preencheMatriz(agMedico *medico){
             else if(ho == 4){
                 medico->agenda[ho][di] = -1;
             }
-            else {
-                medico->agenda[ho][di] = 0;
-            }
+            
+            medico->agenda[ho][di] = 0;
+            
         }
     }
 
 }
-
+*/
 
 void buscaHorarios(agMedico *medico,int *posicao,int indice, int cont, FILE *arqEntrada, char *str){
 
