@@ -15,6 +15,7 @@
 //Funcoes desse codigo
 void procuraMedico(agMedico * );
 void preencheMedicos( agMedico *, FILE *, FILE *, char *);
+
 void criaArquivoMedico(FILE *, agMedico *, FILE *, char *, char *);
 void dadosMedico(FILE *, agMedico *, FILE *, char *);
 void inserirValor(char *, agMedico *);

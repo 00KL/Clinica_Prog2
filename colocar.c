@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "preenche.c"
+//#include "preenche.c"
 #include "semanas.c"
 #include "buscaHorarios.c"
 
@@ -15,7 +15,9 @@
 void colocar(FILE *, agMedico *, FILE *, char *);
 //void preencheMatriz(agMedico *medico);
 void buscaHorarios(agMedico *, int *, int , int ,FILE *, char *);
-void semanas(agMedico *, FILE *, int);
+
+void semanas(agMedico *, FILE *);
+
 int pacienteMedico(agMedico *, FILE *);
 int compStr(char *, char *);
 
@@ -23,13 +25,13 @@ void colocar(FILE *arqEntrada, agMedico *medico, FILE *arqSaida, char *str){
 
     //printf("%s", medico->nome);
 
-    int indice, posicao[h], cont = 0, semana;
+    int indice, posicao[h], cont = 0;
 
     //preencheMatriz(medico);
 
     buscaHorarios(medico, posicao, indice, cont, arqEntrada, str);
 
-    semanas(medico, arqSaida, semana);
+    semanas(medico, arqSaida);
 
 }
 
@@ -66,25 +68,6 @@ int pacienteMedico(agMedico *medico, FILE *dadosPacientes){
 
   return 0;
 
-}
-
-int compStr(char *str1, char *str2){
-  int contador=0;
-
-  for(int i = 0; i < 18; i++){
-    printf(" %c    %c  \n", str1[i],str2[i]);
-    if(str1[i]==str2[i]){
-
-      contador++;
-    }
-  }
-  printf("\n");
-
-  if(contador==strlen(str1)){
-    return 1;
-  }
-
-  return 0;
 }
 
 /*
@@ -132,7 +115,31 @@ void buscaHorarios(agMedico *medico,int *posicao,int indice, int cont, FILE *arq
     } while(check != '\n' && !feof(arqEntrada) );
 }
 
-void semanas(agMedico *medico, FILE *arqSaida, int semana){
+void semanas(agMedico *medico, FILE *arqSaida){
+
+    int semana = 0;
+
+    char comesoNome[dim], fimNome[5] = {0};
+
+    FILE *arqLista;
+
+    for(semana = 1; semana < 5; semana++){
+
+        strcpy(fimNome, " .txt");
+        fimNome[0] = semana + 48;
+
+        strcpy(comesoNome, "entrada/listaPacientes­Semana");
+        strcat(comesoNome, fimNome);
+
+        if (!(arqLista = fopen ( comesoNome, "r"))){
+            printf("ERRO \n");
+            exit(1);
+        }
+    }
+
+    exit(1);
+    
+
     for(semana = 1; semana < 5; semana++){
         escreveMatriz(medico, arqSaida, semana);
     }

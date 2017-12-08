@@ -1,25 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-//#include "procuraMedicos.c"
+
+//arquivos com funções necessárias
 #include "preenche.c"
 
+//Funções usadas nesse arquivo
 void finalDeArquivo(FILE *);
 
 
 int main(){
-    agMedico lucas;
-    char str[dim];
+    //Criação de objeto medico
+    agMedico medico;
+
+    //variaveis necessárias
     FILE *arqSaida, *arqEntrada, *arqLista;
 
-    if (!(arqEntrada = fopen ("entrada/dadosMedicos.txt", "r"))){
-        printf("ERRO \n");
-        exit(1);
-    }
 
 
-
-    preencheMedi(&lucas, arqEntrada, arqLista);
+    preencheMedi(&medico, arqEntrada, arqLista);
     //preencheMedico(&lucas, arqEntrada, arqLista);
     //preencheMedico(&lucas, arqEntrada, arqLista);
 

@@ -3,35 +3,61 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "semanas.c"
+#include "colocar.c"
 
 void preencheMedico(agMedico *, FILE *, FILE *, FILE *);
 
 void diasOcupados(agMedico *, FILE *);
 void preencheMatriz(agMedico *);
-void exebeMatriz(agMedico *);
+void exebeMatriz(agMedico *, FILE *arqSaida);
 
 void nomesListas(FILE *, agMedico *);
 void nomeLista(FILE *, char *, char *, int *);
 
 void aleatorio(agMedico *, int , char *);
 
-int testA(char *, char *);
+int compStr(char *, char *);
 
 
 void preencheMedi(agMedico *medico, FILE *arqMedico, FILE *arqLista){
-    //char str[dim];
+    char comesoNome[dim], fimNome[5] = {0};
 
     //fgets(str, 30, arqMedico);
 
     FILE *arqSaida;
 
-    if (!(arqSaida = fopen ("saida/Joao Silva da Costa.txt", "r"))){
+    if (!(arqSaida = fopen ("saida/Joao Silva da Costa.txt", "w"))){
         printf("ERRO \n");
         exit(1);
     }
 
 
+    for(int semana = 1; semana < 5; semana++){
+
+        if (!(arqMedico = fopen ("entrada/dadosMedicos.txt", "r"))){
+            printf("ERRO\n");
+            exit(1);
+        }
+
+        strcpy(fimNome, " .txt");
+        fimNome[0] = semana + 48;
+
+        strcpy(comesoNome, "entrada/listaPacientesSemana");
+        strcat(comesoNome, fimNome);
+
+        if (!(arqLista = fopen("entrada/listaPacientesSemana4.txt", "r"))){
+            printf("%s \ntortona pra esquerda \n", comesoNome);
+            exit(1);
+        }
+
+        preencheMedico(medico, arqMedico, arqLista, arqSaida);
+
+        fclose(arqLista);
+        fclose(arqMedico);
+
+    }
+
+    /*
     //while(!(feof(arqMedico))){
 
       if (!(arqLista = fopen ("entrada/listaPacientes­Semana1.txt", "r"))){
@@ -42,9 +68,10 @@ void preencheMedi(agMedico *medico, FILE *arqMedico, FILE *arqLista){
       preencheMedico(medico, arqMedico, arqLista, arqSaida);
 
       fclose(arqLista);
-      printf("\n\n\n");
+      //printf("\n\n\n");
     //}
 
+      */
 }
 
 void preencheMedico(agMedico *medico, FILE *arqMedico, FILE *arqLista, FILE *arqSaida){
@@ -59,11 +86,13 @@ void preencheMedico(agMedico *medico, FILE *arqMedico, FILE *arqLista, FILE *arq
 
     diasOcupados(medico, arqMedico);
 
-    nomesListas(arqLista, medico);
+    //nomesListas(arqLista, medico);
 
-    exebeMatriz(medico);
+    //exebeMatriz(medico, arqSaida);
 
-    escreveMatriz(medico, arqSaida, 1);
+    //escreveMatriz(medico, arqSaida, 1);
+
+    //semanas(medico, arqSaida);
 }
 
 void preencheMatriz(agMedico *medico){
@@ -84,7 +113,7 @@ void preencheMatriz(agMedico *medico){
 void diasOcupados(agMedico *medico, FILE *arqMedico){
 
     int dia, hora;
-    char check;
+    char check = ' ';
 
 
         fscanf(arqMedico, "%d", &dia);
@@ -99,6 +128,9 @@ void diasOcupados(agMedico *medico, FILE *arqMedico){
             medico->agenda[hora - 8][dia - 2] = -1;
 
             //printf("%d %d \n", hora, dia);
+            //printf("rola tortona");
+            printf("%c\n", check);
+
 
         }while(check != '\n');
 
@@ -111,7 +143,10 @@ void diasOcupados(agMedico *medico, FILE *arqMedico){
 
 }
 
-void exebeMatriz(agMedico *medico){
+void exebeMatriz(agMedico *medico, FILE *arqSaida){
+
+    
+
     for(int ho = 0; ho < h; ho++){
         for(int di = 0; di < d; di++){
             if(medico->agenda[ho][di] == 0){
@@ -177,7 +212,7 @@ void nomesListas(FILE *arqLista, agMedico *medico){
         //printf("%d \n", id);
         //printf("%c  %c  \n", nomeMedico[11],medico->nome[11]);
 
-        if(testA(nomeMedico, medico->nome)){
+        if(compStr(nomeMedico, medico->nome)){
             //printf("%s %s\n" , nomeMedico, medico->nome);
             aleatorio(medico, id, nomeMedico);
         }
@@ -186,7 +221,7 @@ void nomesListas(FILE *arqLista, agMedico *medico){
     }
 }
 
-int testA(char *str, char *str1){
+int compStr(char *str, char *str1){
     int cont = 0, i = 0;
     for(i = 0; str[i] != '\0'; i++){
         //printf("%c  %c  \n", str[i], str1[i]);

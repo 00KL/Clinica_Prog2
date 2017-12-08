@@ -47,15 +47,15 @@ void escreveMatriz(agMedico *medico, FILE *arqSaida, int semana){
 
           if(medico->agenda[ho][di] == 0){
 
-              fprintf(arqSaida, " %d  ", medico->agenda[ho][di]);
+              fprintf(arqSaida, " %d   ", medico->agenda[ho][di]);
 
           }else if(medico->agenda[ho][di] == -1){
 
-              fprintf(arqSaida, "%d  ", medico->agenda[ho][di]);
+              fprintf(arqSaida, "%d   ", medico->agenda[ho][di]);
 
           }else{
 
-              fprintf(arqSaida, "%d ", medico->agenda[ho][di]);
+              fprintf(arqSaida, "%d  ", medico->agenda[ho][di]);
           }
 
         }
