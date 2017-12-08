@@ -2,118 +2,128 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <time.h>
 #include "colocar.c"
 
 void preencheMedico(agMedico *, FILE *, FILE *, FILE *);
 
-void diasOcupados(agMedico *, FILE *);
-void preencheMatriz(agMedico *);
+void nomeLista(char *, int);
+
+void diasOcupados(agMedico *, FILE *, agMedico *);
+void preencheMatriz(agMedico *, agMedico *);
+
 void exebeMatriz(agMedico *, FILE *arqSaida);
 
-void nomesListas(FILE *, agMedico *);
-void nomeLista(FILE *, char *, char *, int *);
+void marcaHorario(FILE *, agMedico *);
+void obterPaciente(FILE *, char *, char *, int *);
 
 void aleatorio(agMedico *, int , char *);
 
 int compStr(char *, char *);
 
+void copiaMatriz(agMedico *, agMedico *);
 
-void preencheMedi(agMedico *medico, FILE *arqMedico, FILE *arqLista){
-    char comesoNome[dim], fimNome[5] = {0};
 
-    //fgets(str, 30, arqMedico);
+void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista){
 
     FILE *arqSaida;
 
-    if (!(arqSaida = fopen ("saida/Joao Silva da Costa.txt", "w"))){
+    if (!(arqEntrada = fopen ("entrada/dadosMedicos.txt", "r"))){
+        printf("ERRO1\n");
+        exit(1);
+    }
+
+    while(! feof(arqEntrada)){
+
+        preencheMedico(medico, arqEntrada, arqLista, arqSaida);
+
+    }
+}
+
+void preencheMedico(agMedico *medico, FILE *arqEntrada, FILE *arqLista, FILE *arqSaida){
+    agMedico copia;
+    char nomeArq[dim+5],nomeM[dim];
+
+    fgets(medico->nome, dim, arqEntrada);
+
+    strcpy(nomeM,medico->nome);
+    nomeM[ strlen(medico->nome) - 1 ] = '.' ;
+
+    strcpy(nomeArq, "saida/");
+    strcat(nomeArq, nomeM);
+    strcat(nomeArq, "txt");
+
+    if (!(arqSaida = fopen (nomeArq, "w"))){
         printf("ERRO \n");
         exit(1);
     }
 
+    fprintf(arqSaida, "%s", medico->nome);
+
+    fscanf(arqEntrada, "%d\n", &medico->id);
+    fprintf(arqSaida, "%d\n", medico->id);
+
+    fgets(medico->especialidade, dim, arqEntrada);
+    fprintf(arqSaida, "%s", medico->especialidade);
+
+    preencheMatriz(medico, &copia);
+
+    diasOcupados(medico, arqEntrada, &copia);
 
     for(int semana = 1; semana < 5; semana++){
+      nomeLista(nomeArq, semana);
 
-        if (!(arqMedico = fopen ("entrada/dadosMedicos.txt", "r"))){
-            printf("ERRO\n");
-            exit(1);
-        }
-
-        strcpy(fimNome, " .txt");
-        fimNome[0] = semana + 48;
-
-        strcpy(comesoNome, "entrada/listaPacientesSemana");
-        strcat(comesoNome, fimNome);
-
-        if (!(arqLista = fopen("entrada/listaPacientesSemana4.txt", "r"))){
-            printf("%s \ntortona pra esquerda \n", comesoNome);
-            exit(1);
-        }
-
-        preencheMedico(medico, arqMedico, arqLista, arqSaida);
-
-        fclose(arqLista);
-        fclose(arqMedico);
-
-    }
-
-    /*
-    //while(!(feof(arqMedico))){
-
-      if (!(arqLista = fopen ("entrada/listaPacientes­Semana1.txt", "r"))){
-          printf("ERRO \n");
+      if (!(arqLista = fopen(nomeArq, "r"))){
+          printf("%s \nERRO3 \n", nomeArq);
           exit(1);
       }
 
-      preencheMedico(medico, arqMedico, arqLista, arqSaida);
+      marcaHorario(arqLista, medico);
+
+      //exebeMatriz(medico, arqSaida);
+
+      escreveMatriz(medico, arqSaida, semana);
+
+      copiaMatriz(medico, &copia);
 
       fclose(arqLista);
-      //printf("\n\n\n");
-    //}
 
-      */
+    }
+
 }
 
-void preencheMedico(agMedico *medico, FILE *arqMedico, FILE *arqLista, FILE *arqSaida){
+void nomeLista(char *nomeArq, int semana){
 
-    fgets(medico->nome, dim, arqMedico);
+  char fimNome[5];
 
-    fscanf(arqMedico, "%d\n", &medico->id);
+  strcpy(fimNome, " .txt");
+  fimNome[0] = semana + 48;
 
-    fgets(medico->especialidade, dim, arqMedico);
+  strcpy(nomeArq, "entrada/listaPacientesSemana");
+  strcat(nomeArq, fimNome);
 
-    preencheMatriz(medico);
-
-    diasOcupados(medico, arqMedico);
-
-    //nomesListas(arqLista, medico);
-
-    //exebeMatriz(medico, arqSaida);
-
-    //escreveMatriz(medico, arqSaida, 1);
-
-    //semanas(medico, arqSaida);
 }
 
-void preencheMatriz(agMedico *medico){
+void preencheMatriz(agMedico *medico, agMedico *copia){
     for(int ho = 0; ho < h; ho++){
 
         for(int di = 0; di < d; di++){
 
             if(ho == 4){
+                copia->agenda[ho][di] = -1;
                 medico->agenda[ho][di] = -1;
             }else{
                 medico->agenda[ho][di] = 0;
+                copia->agenda[ho][di] = 0;
             }
-
         }
     }
 }
 
-void diasOcupados(agMedico *medico, FILE *arqMedico){
+void diasOcupados(agMedico *medico, FILE *arqMedico, agMedico *copia){
 
     int dia, hora;
-    char check = ' ';
+    char check = '\n';
 
 
         fscanf(arqMedico, "%d", &dia);
@@ -126,11 +136,7 @@ void diasOcupados(agMedico *medico, FILE *arqMedico){
             fscanf(arqMedico, "%d%c", &hora, &check);
 
             medico->agenda[hora - 8][dia - 2] = -1;
-
-            //printf("%d %d \n", hora, dia);
-            //printf("rola tortona");
-            printf("%c\n", check);
-
+            copia->agenda[hora - 8][dia - 2] = -1;
 
         }while(check != '\n');
 
@@ -144,8 +150,6 @@ void diasOcupados(agMedico *medico, FILE *arqMedico){
 }
 
 void exebeMatriz(agMedico *medico, FILE *arqSaida){
-
-    
 
     for(int ho = 0; ho < h; ho++){
         for(int di = 0; di < d; di++){
@@ -191,29 +195,27 @@ void aleatorio(agMedico *medico, int id, char *nome){
 
 }
 
-void nomeLista(FILE *arqLista, char *nomeMedico, char *lixo, int *id){
+void obterPaciente(FILE *arqLista, char *nomeMedico, char *lixo, int *id){
     fgets(lixo, 30, arqLista);
     fscanf( arqLista ,"%d\n", id);
     fgets(lixo, 30, arqLista);
     fgets(lixo, 30, arqLista);
     fgets(nomeMedico, dim, arqLista);
 
-    //printf("%d \n%s", *id, nomeMedico);
+
 }
 
-void nomesListas(FILE *arqLista, agMedico *medico){
+void marcaHorario(FILE *arqLista, agMedico *medico){
     char nomeMedico[dim], lixo[dim];
     int id;
 
     srand(time(NULL) );
 
     while(! feof(arqLista) ){
-        nomeLista(arqLista, nomeMedico, lixo, &id);
-        //printf("%d \n", id);
-        //printf("%c  %c  \n", nomeMedico[11],medico->nome[11]);
+        obterPaciente(arqLista, nomeMedico, lixo, &id);
 
         if(compStr(nomeMedico, medico->nome)){
-            //printf("%s %s\n" , nomeMedico, medico->nome);
+
             aleatorio(medico, id, nomeMedico);
         }
 
@@ -224,15 +226,29 @@ void nomesListas(FILE *arqLista, agMedico *medico){
 int compStr(char *str, char *str1){
     int cont = 0, i = 0;
     for(i = 0; str[i] != '\0'; i++){
-        //printf("%c  %c  \n", str[i], str1[i]);
+
         if(str[i] == str1[i]){
             cont ++;
         }
     }
 
     if(cont == i){
-        //printf("%s", str);
+
         return 1;
     }
     return 0;
+}
+
+void copiaMatriz(agMedico *medico, agMedico *copia){
+  for(int ho = 0; ho < h; ho++){
+
+      for(int di = 0; di < d; di++){
+
+          if(ho == 4){
+              copia->agenda[ho][di] = medico->agenda[ho][di];
+          }else{
+              medico->agenda[ho][di] = copia->agenda[ho][di];
+          }
+      }
+   }
 }

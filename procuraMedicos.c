@@ -80,7 +80,7 @@ void criaArquivoMedico(FILE *arqEntrada, agMedico *medico, FILE *arqSaida, char 
 
 void dadosMedico(FILE *arqEntrada, agMedico *medico, FILE *arqSaida, char *str){
 
-    
+
     fprintf(arqSaida, "%s", str);
 
     fgets(str, 30, arqEntrada);

@@ -128,3 +128,33 @@
 
     }
     */
+
+    /*void semanas(agMedico *medico, FILE *arqSaida){
+
+        int semana;
+
+        char comesoNome[dim], fimNome[5] = {0};
+
+        FILE *arqLista;
+
+        for(semana = 1; semana < 5; semana++){
+
+            strcpy(fimNome, " .txt");
+            fimNome[0] = semana + 48;
+
+            strcpy(comesoNome, "entrada/listaPacientes­Semana");
+            strcat(comesoNome, fimNome);
+
+            if (!(arqLista = fopen("entrada/listaPacientesSemana1.txt", "r"))){
+                printf("ERRO2 \n");
+                exit(1);
+            }
+        }
+
+        exit(1);
+
+
+        for(semana = 1; semana < 5; semana++){
+            escreveMatriz(medico, arqSaida, semana);
+        }
+    }*/
