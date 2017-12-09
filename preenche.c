@@ -11,6 +11,8 @@
 
 void preencheMedico(agMedico *, FILE *, FILE *, FILE *);
 
+void medicoPopular(char *, agMedico *, int *);
+
 void escreveDadosMedico(FILE *, FILE *, agMedico *);
 
 void nomeLista(char *, int);
@@ -34,12 +36,20 @@ void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista){
 
     //Variaveis necessarias
     FILE *arqSaida;
+    medico->consultas = 0;
+    int maisConsultas = 0;
+    char maisProcurados[100];
+
+    /*to achando q vamos ter q criar um vetor
+    de structs para as proximas questões...*/
+    //cliente todosOsClientes[100];
 
     //preenchimento de arqEntrada
     if (!(arqEntrada = fopen ("entrada/dadosMedicos.txt", "r"))){
         printf("ERRO1\n");
         exit(1);
     }
+
 
     /*Loop para percorrer arqEntrada e extrair as informações
     necessárias para o enunciado do trabalho
@@ -51,10 +61,31 @@ void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista){
     e por isso é necessário negar sua saida no argumento
     do loop*/
     while(! feof(arqEntrada)){
-
+        
         preencheMedico(medico, arqEntrada, arqLista, arqSaida);
 
+        /*extrai o medico mais popular*/
+        medicoPopular(maisProcurados, medico, &maisConsultas);
     }
+
+    /*Printa na tela o medico mais popular
+    SO PARA TESTES*/
+    printf("%s", maisProcurados);
+
+    
+}
+
+//SO PARA TESTES
+void medicoPopular(char *maisProcurados, agMedico *medico, int *maisConsultas){
+    if(*maisConsultas == medico->consultas){
+        strcat(maisProcurados, "\n");
+        strcat(maisProcurados, medico->nome);
+    } 
+    else if (*maisConsultas < medico->consultas){
+        strcpy(maisProcurados, medico->nome);
+        *maisConsultas = medico->consultas;
+    }
+
 }
 
 void preencheMedico(agMedico *medico, FILE *arqEntrada, FILE *arqLista, FILE *arqSaida){
@@ -124,6 +155,7 @@ void preencheMedico(agMedico *medico, FILE *arqEntrada, FILE *arqLista, FILE *ar
     estabelecidos no arqLista
      */
     for(int semana = 1; semana < 5; semana++){
+    
       /*cria nome devido para o arquivo do loop em questão*/
       nomeLista(nomeArq, semana);
 
@@ -167,6 +199,8 @@ void escreveDadosMedico(FILE *arqEntrada, FILE *arqSaida, agMedico *medico){
   fgets(medico->especialidade, dim, arqEntrada);
   /*escreve a especialidade do medico no arquivo de saida*/
   fprintf(arqSaida, "%s", medico->especialidade);
+
+  medico->consultas = 0;
 }
 
 void preencheMatriz(agMedico *medico, agMedico *copia){
@@ -226,11 +260,13 @@ void marcaHorario(FILE *arqLista, agMedico *medico){
         obterPaciente(arqLista, nomeMedico, lixo, &id);
 
         if(compStr(nomeMedico, medico->nome)){
+            medico->consultas+=1;
 
             aleatorio(medico, id, nomeMedico);
         }
 
         fgets(lixo, 30, arqLista);
+
     }
 }
 
@@ -300,7 +336,7 @@ void diasOcupados(agMedico *medico, FILE *arqMedico, agMedico *copia){
 
             /*gravação do valor q representa ocupado '-1' nas posições
             estavelecidas no arquivo de entrada.
-            o '-8' na hora é porque as horas começão a ser contadas de
+            o '-8' na hora é porque as horas começão a ser contadas de)
             '8' no arquivo de entrada no enunciado da questão, porém uma
             matriz tem por primeira posição o valor '0'
             o '-2' no dia é porque os dias começam a ser contados de
@@ -309,8 +345,9 @@ void diasOcupados(agMedico *medico, FILE *arqMedico, agMedico *copia){
             medico->agenda[hora - 8][dia - 2] = -1;
             copia->agenda[hora - 8][dia - 2] = -1;
 
-        }while(check != '\n');/*a condição de parada do primeiro loop é o fim
+        }while( check != '\n' && !feof(arqMedico) );/*a condição de parada do primeiro loop é o fim
         de uma linha do arquivo que sempre será '/n' */
+
 
         /*o arquivo check le a proxima posição, essa proxima posição pode
       ser um interiro, reprensetando mais um dia, ou um '\n' reprensetando
@@ -322,7 +359,7 @@ void diasOcupados(agMedico *medico, FILE *arqMedico, agMedico *copia){
         pois há  possibilidade de ser o proximo dia*/
         dia = check - 48;
 
-    }while(check != '\n');/*um '\n' reprensetando
+    }while(check != '\n' && !feof(arqMedico));/*um '\n' reprensetando
     uma linha vazia q sepera os dados de um medico dos dados do seguinte
     sendo assim a condição de parada para esse loop*/
 
