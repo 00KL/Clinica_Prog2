@@ -12,16 +12,35 @@
 typedef struct {
     char nome[dim];
     int id;
+
     char especialidade[dim];
+    int contEspecialidade;
+    
     int agenda[h][d];
+    int consultas;
 } agMedico;
+
+//Faixa etária
+typedef struct {
+    char faixaUm[dim][dim];
+    int contFaixaUm;
+
+    char faixaDois[dim][dim];
+    int contFaixaDois;
+
+    char faixaTres[dim][dim];
+    int contFaixaTres;
+
+    char faixaQuatro[dim][dim];
+    int contFaixaQuatro;
+} agFaixaEtaria;
 
 
 //Tipo definido no enunciado
 typedef struct {
    char nome[dim];
     int id;
-    long int fone;
+    char fone[dim];
     int idade;
     char medico[dim];
 } cliente;

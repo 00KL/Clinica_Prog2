@@ -9,9 +9,19 @@
 //desse arquivo
 #include "colocar.c"
 
-void preencheMedico(agMedico *, FILE *, FILE *, FILE *);
+void exibeFaixaUm(agFaixaEtaria *, FILE *);
+void exibeFaixaDois(agFaixaEtaria *, FILE *);
+void exibeFaixaTres(agFaixaEtaria *, FILE *);
+void exibeFaixaQuatro(agFaixaEtaria *, FILE *);
+void exibeTodasAsFaixas(agFaixaEtaria *, FILE *);
 
+void criaDadosPacientes(char *, char *, agFaixaEtaria *);
+
+void preencheMedico(agMedico *, FILE *, FILE *, FILE *, agFaixaEtaria *);
+
+void especialidadesPopulares(char *, agMedico *, int *);
 void medicoPopular(char *, agMedico *, int *);
+void iniciaFaixaEtaria(agFaixaEtaria *);
 
 void escreveDadosMedico(FILE *, FILE *, agMedico *);
 
@@ -22,23 +32,28 @@ void preencheMatriz(agMedico *, agMedico *);
 
 void exebeMatriz(agMedico *, FILE *arqSaida);
 
-void marcaHorario(FILE *, agMedico *);
-void obterPaciente(FILE *, char *, char *, int *);
+void marcaHorario(FILE *, agMedico *, agFaixaEtaria *);
+void obterPaciente(FILE *, char *, char *, int *, int *);
 
-void aleatorio(agMedico *, int , char *);
+void aleatorio(agMedico *, int);
 
 int compStr(char *, char *);
 
 void copiaMatriz(agMedico *, agMedico *);
 
 
-void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista){
+void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista, agFaixaEtaria *resultado, agFaixaEtaria *atualizacao){
+
+    iniciaFaixaEtaria(resultado);
 
     //Variaveis necessarias
     FILE *arqSaida;
     medico->consultas = 0;
-    int maisConsultas = 0;
-    char maisProcurados[100];
+    int maisConsultas = 0, especialidadeMaisProcurada = 0;
+    char maisProcurados[100], especialidades[100] = {0};
+
+    iniciaFaixaEtaria(atualizacao);
+    iniciaFaixaEtaria(resultado);
 
     /*to achando q vamos ter q criar um vetor
     de structs para as proximas questões...*/
@@ -62,23 +77,56 @@ void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista){
     do loop*/
     while(! feof(arqEntrada)){
         
-        preencheMedico(medico, arqEntrada, arqLista, arqSaida);
+        preencheMedico(medico, arqEntrada, arqLista, arqSaida, atualizacao);
 
         /*extrai o medico mais popular*/
         medicoPopular(maisProcurados, medico, &maisConsultas);
+
+        /*extrai e organiza as especialidades em mais procuradas*/
+        especialidadesPopulares(especialidades, medico, &especialidadeMaisProcurada);
     }
 
     /*Printa na tela o medico mais popular
     SO PARA TESTES*/
-    printf("%s", maisProcurados);
-
+    //printf("%s\n", maisProcurados);
+    //printf("%s", especialidades);
+    //exibeTodasAsFaixas(atualizacao);
+    
+    criaDadosPacientes(maisProcurados, especialidades, atualizacao);
     
 }
 
+void criaDadosPacientes(char *maisProcurados, char *especialidades, agFaixaEtaria *atualizacao){
+    FILE *arqDadosClinica;
+
+    if (!(arqDadosClinica = fopen ("saida/dadosClinica.txt", "w"))){
+        printf("ERRO \n");
+        exit(1);
+    }
+    fprintf(arqDadosClinica, "Dados da Clinica:\n\n");
+    
+    fprintf(arqDadosClinica, "Médico mais popular:\n");
+    fprintf(arqDadosClinica, "%s\n", maisProcurados);
+
+    fprintf(arqDadosClinica, "Ranking   da   procura   por   especialidades   médicas:\n");
+    fprintf(arqDadosClinica, "%s\n", especialidades);
+
+    fprintf(arqDadosClinica, "Especialidade   mais   procurada   por   faixa   etária:\n");
+    exibeTodasAsFaixas(atualizacao, arqDadosClinica);
+
+}
+
+
+
+
+
+
+
+
 //SO PARA TESTES
 void medicoPopular(char *maisProcurados, agMedico *medico, int *maisConsultas){
+    
     if(*maisConsultas == medico->consultas){
-        strcat(maisProcurados, "\n");
         strcat(maisProcurados, medico->nome);
     } 
     else if (*maisConsultas < medico->consultas){
@@ -88,7 +136,192 @@ void medicoPopular(char *maisProcurados, agMedico *medico, int *maisConsultas){
 
 }
 
-void preencheMedico(agMedico *medico, FILE *arqEntrada, FILE *arqLista, FILE *arqSaida){
+//SO PARA TESTES
+void especialidadesPopulares(char *especialidades, agMedico *medico, int *especialidadeMaisProcurada){
+    char atualizaResultado[100];
+    char *local;
+
+    //local = strstr(especialidades, medico->especialidade);
+
+    if( (*especialidadeMaisProcurada < medico->contEspecialidade) && !(strstr(especialidades, medico->especialidade)) ){
+        strcpy(atualizaResultado, especialidades);
+        strcpy(especialidades, medico->especialidade);
+        strcat(especialidades, atualizaResultado);
+        *especialidadeMaisProcurada = medico->contEspecialidade;
+    }
+
+    else if( *especialidadeMaisProcurada == medico->contEspecialidade && strstr(especialidades, medico->especialidade) == 0 ){
+        printf("test\n");
+        strcat(especialidades, medico->especialidade);
+    }
+}
+
+//SO PARA TESTES
+void iniciaFaixaEtaria(agFaixaEtaria *resultado){
+    //strcpy(resultado->faixaUm, " ");
+    resultado->contFaixaUm = 0;
+
+    //strcpy(resultado->faixaDois, " ");
+    resultado->contFaixaDois = 0;
+
+    //strcpy(resultado->faixaDois, " ");
+    resultado->contFaixaTres = 0;
+
+    //strcpy(resultado->faixaDois, " ");
+    resultado->contFaixaQuatro = 0;
+}
+
+//SO PARA TESTES
+void pesquisaDeFaixaEtaria(int idades, char *especialidade, agFaixaEtaria *atualizacao){
+    
+    int idade = 2017;
+    idade -= idades;
+    char lixo;
+
+    if( idade < 26){
+        strcpy(atualizacao->faixaUm[atualizacao->contFaixaUm], especialidade);
+        atualizacao->contFaixaUm+=1;    
+        
+    }
+    else if( idade < 51){
+        strcpy(atualizacao->faixaDois[atualizacao->contFaixaDois], especialidade);
+        atualizacao->contFaixaDois+=1;    
+    }
+    else if(idade < 76){
+        strcpy(atualizacao->faixaTres[atualizacao->contFaixaTres], especialidade);
+        atualizacao->contFaixaTres+=1;   
+    }
+    else if(idade < 101){
+        strcpy(atualizacao->faixaQuatro[atualizacao->contFaixaQuatro], especialidade);
+        atualizacao->contFaixaQuatro+=1;    
+        
+    }
+
+
+}
+
+
+void exibeTodasAsFaixas(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
+    
+    exibeFaixaUm(pesquisa, arqDadosClinica);
+    exibeFaixaDois(pesquisa, arqDadosClinica);
+    exibeFaixaTres(pesquisa, arqDadosClinica);
+    exibeFaixaQuatro(pesquisa, arqDadosClinica);
+}
+
+//SO PARA TESTES
+void exibeFaixaUm(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
+    int cont1 = 0, cont2 = 0;
+    char vencedor[dim] = " ";
+    for(int i = 0; i < pesquisa->contFaixaUm; i++){
+        
+        if(!compStr(pesquisa->faixaUm[i], " ")){
+            for(int j = i + 1; j < pesquisa->contFaixaUm; j++){
+                if( compStr(pesquisa->faixaUm[i], pesquisa->faixaUm[j]) ) {
+                    cont1++;
+                    strcpy(pesquisa->faixaUm[j], " ");
+                }
+            }
+            if(cont1 > cont2){
+                cont2 = cont1;
+                strcpy(vencedor, pesquisa->faixaUm[i]); 
+            }
+        }
+    }
+
+    fprintf(arqDadosClinica,"  0 -  25  %s", vencedor);
+    
+}
+
+//SO PARA TESTES
+void exibeFaixaDois(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
+    int cont1 = 0, cont2 = 0;
+    char vencedor[dim] = " ";
+    for(int i = 0; i < pesquisa->contFaixaDois; i++){
+        
+        if(!compStr(pesquisa->faixaDois[i], " ")){
+            for(int j = i + 1; j < pesquisa->contFaixaDois; j++){
+                if( compStr(pesquisa->faixaDois[i], pesquisa->faixaDois[j]) ) {
+                    cont1++;
+                    strcpy(pesquisa->faixaDois[j], " ");
+                }
+            }
+            if(cont1 > cont2){
+                cont2 = cont1;
+                strcpy(vencedor, pesquisa->faixaDois[i]); 
+            }
+        }
+    }
+
+    fprintf(arqDadosClinica," 26 -  50  %s", vencedor);
+    
+}
+
+//SO PARA TESTES
+void exibeFaixaTres(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
+    int cont1 = 0, cont2 = 0;
+    char vencedor[dim] = " ";
+    for(int i = 0; i < pesquisa->contFaixaTres; i++){
+        
+        if(!compStr(pesquisa->faixaTres[i], " ")){
+            for(int j = i + 1; j < pesquisa->contFaixaTres; j++){
+                if( compStr(pesquisa->faixaTres[i], pesquisa->faixaTres[j]) ) {
+                    cont1++;
+                    strcpy(pesquisa->faixaTres[j], " ");
+                }
+            }
+            if(cont1 > cont2){
+                cont2 = cont1;
+                strcpy(vencedor, pesquisa->faixaTres[i]); 
+            }
+        }
+    }
+
+    fprintf(arqDadosClinica, " 51 -  75  %s", vencedor);
+    
+}
+
+//SO PARA TESTES
+void exibeFaixaQuatro(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
+    int cont1 = 0, cont2 = 0;
+    char vencedor[dim] = " ";
+    for(int i = 0; i < pesquisa->contFaixaQuatro; i++){
+        
+        if(!compStr(pesquisa->faixaQuatro[i], " ")){
+            for(int j = i + 1; j < pesquisa->contFaixaQuatro; j++){
+                if( compStr(pesquisa->faixaQuatro[i], pesquisa->faixaQuatro[j]) ) {
+                    cont1++;
+                    strcpy(pesquisa->faixaQuatro[j], " ");
+                }
+            }
+            if(cont1 > cont2){
+                cont2 = cont1;
+                strcpy(vencedor, pesquisa->faixaQuatro[i]); 
+            }
+        }
+    }
+
+    fprintf(arqDadosClinica, " 76 - 100  %s", vencedor);
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void preencheMedico(agMedico *medico, FILE *arqEntrada, FILE *arqLista, FILE *arqSaida, agFaixaEtaria *atualizacao){
     /*Variaveis necessárias para a função
 
     agMedico copia esta servindo para armazenar uma copia
@@ -167,7 +400,7 @@ void preencheMedico(agMedico *medico, FILE *arqEntrada, FILE *arqLista, FILE *ar
       }
 
 
-      marcaHorario(arqLista, medico);
+      marcaHorario(arqLista, medico, atualizacao);
 
       //exebeMatriz(medico, arqSaida);
 
@@ -228,7 +461,7 @@ void preencheMatriz(agMedico *medico, agMedico *copia){
     }
 }
 
-void marcaHorario(FILE *arqLista, agMedico *medico){
+void marcaHorario(FILE *arqLista, agMedico *medico, agFaixaEtaria *atualizacao){
 
     /*variaveis q serão utilizados na questão
 
@@ -240,7 +473,7 @@ void marcaHorario(FILE *arqLista, agMedico *medico){
     matriz da semana do medico em questão desse loop
     */
     char nomeMedico[dim], lixo[dim];
-    int id;
+    int id, idade;
 
     /*geração de seed aleatoria para o rand baseada
     no tempo de execução do codigo*/
@@ -257,12 +490,15 @@ void marcaHorario(FILE *arqLista, agMedico *medico){
     while(! feof(arqLista) ){
 
         /*essa função irá percorrer o arquivo listaPc*/
-        obterPaciente(arqLista, nomeMedico, lixo, &id);
+        obterPaciente(arqLista, nomeMedico, lixo, &id, &idade);
 
         if(compStr(nomeMedico, medico->nome)){
             medico->consultas+=1;
+            medico->contEspecialidade+=1;
 
-            aleatorio(medico, id, nomeMedico);
+            pesquisaDeFaixaEtaria( idade, medico->especialidade, atualizacao);
+
+            aleatorio(medico, id);
         }
 
         fgets(lixo, 30, arqLista);
@@ -390,7 +626,7 @@ void exebeMatriz(agMedico *medico, FILE *arqSaida){
     }
 }
 
-void aleatorio(agMedico *medico, int id, char *nome){
+void aleatorio(agMedico *medico, int id){
 
     int hora =  rand()%9;
     int dia = rand()%4;
@@ -413,14 +649,12 @@ void aleatorio(agMedico *medico, int id, char *nome){
 
 }
 
-void obterPaciente(FILE *arqLista, char *nomeMedico, char *lixo, int *id){
+void obterPaciente(FILE *arqLista, char *nomeMedico, char *lixo, int *id, int *idade){
     fgets(lixo, 30, arqLista);
     fscanf( arqLista ,"%d\n", id);
     fgets(lixo, 30, arqLista);
-    fgets(lixo, 30, arqLista);
+    fscanf(arqLista, "%d %d %d\n", idade, idade, idade);
     fgets(nomeMedico, dim, arqLista);
-
-
 }
 
   /*essa função está sendo usada para substituir a strcmp

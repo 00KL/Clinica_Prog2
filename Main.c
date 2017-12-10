@@ -5,19 +5,20 @@
 //arquivos com funções necessárias
 #include "preenche.c"
 
-//Funções usadas nesse arquivo
-void finalDeArquivo(FILE *);
 
 
 int main(){
-    //Criação de objeto medico
+
+    //Criação de structs
     agMedico medico;
+    agFaixaEtaria resultado, atualizacao;
 
     //variaveis necessárias
     FILE *arqSaida, *arqEntrada, *arqLista;
 
+
     //função q irá executar os objetivos no enunciado
-    preencheMedi(&medico, arqEntrada, arqLista);
+    preencheMedi(&medico, arqEntrada, arqLista, &resultado, &atualizacao);
 
     return 0;
 }
