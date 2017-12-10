@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 void colocarValores(agMedico *, int *, int , int , FILE *, char *);
 void extrair(char *, int *, int *);
 void colocarValor(agMedico *, int *, int, int);

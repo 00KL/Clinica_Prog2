@@ -1,20 +1,11 @@
-//Bibliotecas relevantes para o progama
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-//#include "preenche.c"
-#include "semanas.c"
+//Arquivos relevantes
 #include "buscaHorarios.c"
-
-//Constantes estabelicdas no enunciado
-#define dim 30
-#define h 10
-#define d 5
 
 //funcoes
 void colocar(FILE *, agMedico *, FILE *, char *);
 
 void buscaHorarios(agMedico *, int *, int , int ,FILE *, char *);
+
 
 void colocar(FILE *arqEntrada, agMedico *medico, FILE *arqSaida, char *str){
 

@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 //arquivos com funções necessárias
 #include "preenche.c"
-
-
 
 int main(){
 

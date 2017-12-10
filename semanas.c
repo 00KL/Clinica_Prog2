@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include "structs.c"
-
 void horas(int , FILE *);
 void escreveMatriz(agMedico *, FILE *, int);
 

@@ -1,45 +1,38 @@
-//Bibliotecas relevantes para o progama
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
 
 //Arquivos necessários por conter
 //funções relevantes para o funcionamento
 //desse arquivo
+
+//A ordem em q cada um dos arquivos são chamadas
+//é TOTALMENTE RELEVANTE, pois ao chamar structs.c
+//antes de colocar.c e criaDadosPacientes.c permite
+//que os structs sejam acessiveis para colocar.c e 
+//criaDadosPacientes.c
+#include "structs.c"
+#include "semanas.c"
 #include "colocar.c"
+#include "criaDadosPacientes.c"
 
-void exibeFaixaUm(agFaixaEtaria *, FILE *);
-void exibeFaixaDois(agFaixaEtaria *, FILE *);
-void exibeFaixaTres(agFaixaEtaria *, FILE *);
-void exibeFaixaQuatro(agFaixaEtaria *, FILE *);
-void exibeTodasAsFaixas(agFaixaEtaria *, FILE *);
-
-void criaDadosPacientes(char *, char *, agFaixaEtaria *);
 
 void preencheMedico(agMedico *, FILE *, FILE *, FILE *, agFaixaEtaria *);
-
-void especialidadesPopulares(char *, agMedico *, int *);
-void medicoPopular(char *, agMedico *, int *);
-void iniciaFaixaEtaria(agFaixaEtaria *);
 
 void escreveDadosMedico(FILE *, FILE *, agMedico *);
 
 void nomeLista(char *, int);
 
 void diasOcupados(agMedico *, FILE *, agMedico *);
-void preencheMatriz(agMedico *, agMedico *);
 
-void exebeMatriz(agMedico *, FILE *arqSaida);
+void preencheMatriz(agMedico *, agMedico *);
 
 void marcaHorario(FILE *, agMedico *, agFaixaEtaria *);
 void obterPaciente(FILE *, char *, char *, int *, int *);
-
 void aleatorio(agMedico *, int);
 
-int compStr(char *, char *);
 
 void copiaMatriz(agMedico *, agMedico *);
+
+//SO PARA TESTES
+void exebeMatriz(agMedico *, FILE *arqSaida);
 
 
 void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista, agFaixaEtaria *resultado, agFaixaEtaria *atualizacao){
@@ -85,240 +78,10 @@ void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista, agFaixaEta
         /*extrai e organiza as especialidades em mais procuradas*/
         especialidadesPopulares(especialidades, medico, &especialidadeMaisProcurada);
     }
-
-    /*Printa na tela o medico mais popular
-    SO PARA TESTES*/
-    //printf("%s\n", maisProcurados);
-    //printf("%s", especialidades);
-    //exibeTodasAsFaixas(atualizacao);
     
     criaDadosPacientes(maisProcurados, especialidades, atualizacao);
     
 }
-
-void criaDadosPacientes(char *maisProcurados, char *especialidades, agFaixaEtaria *atualizacao){
-    FILE *arqDadosClinica;
-
-    if (!(arqDadosClinica = fopen ("saida/dadosClinica.txt", "w"))){
-        printf("ERRO \n");
-        exit(1);
-    }
-    fprintf(arqDadosClinica, "Dados da Clinica:\n\n");
-    
-    fprintf(arqDadosClinica, "Médico mais popular:\n");
-    fprintf(arqDadosClinica, "%s\n", maisProcurados);
-
-    fprintf(arqDadosClinica, "Ranking   da   procura   por   especialidades   médicas:\n");
-    fprintf(arqDadosClinica, "%s\n", especialidades);
-
-    fprintf(arqDadosClinica, "Especialidade   mais   procurada   por   faixa   etária:\n");
-    exibeTodasAsFaixas(atualizacao, arqDadosClinica);
-
-}
-
-
-
-
-
-
-
-
-//SO PARA TESTES
-void medicoPopular(char *maisProcurados, agMedico *medico, int *maisConsultas){
-    
-    if(*maisConsultas == medico->consultas){
-        strcat(maisProcurados, medico->nome);
-    } 
-    else if (*maisConsultas < medico->consultas){
-        strcpy(maisProcurados, medico->nome);
-        *maisConsultas = medico->consultas;
-    }
-
-}
-
-//SO PARA TESTES
-void especialidadesPopulares(char *especialidades, agMedico *medico, int *especialidadeMaisProcurada){
-    char atualizaResultado[100];
-    char *local;
-
-    //local = strstr(especialidades, medico->especialidade);
-
-    if( (*especialidadeMaisProcurada < medico->contEspecialidade) && !(strstr(especialidades, medico->especialidade)) ){
-        strcpy(atualizaResultado, especialidades);
-        strcpy(especialidades, medico->especialidade);
-        strcat(especialidades, atualizaResultado);
-        *especialidadeMaisProcurada = medico->contEspecialidade;
-    }
-
-    else if( *especialidadeMaisProcurada == medico->contEspecialidade && strstr(especialidades, medico->especialidade) == 0 ){
-        printf("test\n");
-        strcat(especialidades, medico->especialidade);
-    }
-}
-
-//SO PARA TESTES
-void iniciaFaixaEtaria(agFaixaEtaria *resultado){
-    //strcpy(resultado->faixaUm, " ");
-    resultado->contFaixaUm = 0;
-
-    //strcpy(resultado->faixaDois, " ");
-    resultado->contFaixaDois = 0;
-
-    //strcpy(resultado->faixaDois, " ");
-    resultado->contFaixaTres = 0;
-
-    //strcpy(resultado->faixaDois, " ");
-    resultado->contFaixaQuatro = 0;
-}
-
-//SO PARA TESTES
-void pesquisaDeFaixaEtaria(int idades, char *especialidade, agFaixaEtaria *atualizacao){
-    
-    int idade = 2017;
-    idade -= idades;
-    char lixo;
-
-    if( idade < 26){
-        strcpy(atualizacao->faixaUm[atualizacao->contFaixaUm], especialidade);
-        atualizacao->contFaixaUm+=1;    
-        
-    }
-    else if( idade < 51){
-        strcpy(atualizacao->faixaDois[atualizacao->contFaixaDois], especialidade);
-        atualizacao->contFaixaDois+=1;    
-    }
-    else if(idade < 76){
-        strcpy(atualizacao->faixaTres[atualizacao->contFaixaTres], especialidade);
-        atualizacao->contFaixaTres+=1;   
-    }
-    else if(idade < 101){
-        strcpy(atualizacao->faixaQuatro[atualizacao->contFaixaQuatro], especialidade);
-        atualizacao->contFaixaQuatro+=1;    
-        
-    }
-
-
-}
-
-
-void exibeTodasAsFaixas(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
-    
-    exibeFaixaUm(pesquisa, arqDadosClinica);
-    exibeFaixaDois(pesquisa, arqDadosClinica);
-    exibeFaixaTres(pesquisa, arqDadosClinica);
-    exibeFaixaQuatro(pesquisa, arqDadosClinica);
-}
-
-//SO PARA TESTES
-void exibeFaixaUm(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
-    int cont1 = 0, cont2 = 0;
-    char vencedor[dim] = " ";
-    for(int i = 0; i < pesquisa->contFaixaUm; i++){
-        
-        if(!compStr(pesquisa->faixaUm[i], " ")){
-            for(int j = i + 1; j < pesquisa->contFaixaUm; j++){
-                if( compStr(pesquisa->faixaUm[i], pesquisa->faixaUm[j]) ) {
-                    cont1++;
-                    strcpy(pesquisa->faixaUm[j], " ");
-                }
-            }
-            if(cont1 > cont2){
-                cont2 = cont1;
-                strcpy(vencedor, pesquisa->faixaUm[i]); 
-            }
-        }
-    }
-
-    fprintf(arqDadosClinica,"  0 -  25  %s", vencedor);
-    
-}
-
-//SO PARA TESTES
-void exibeFaixaDois(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
-    int cont1 = 0, cont2 = 0;
-    char vencedor[dim] = " ";
-    for(int i = 0; i < pesquisa->contFaixaDois; i++){
-        
-        if(!compStr(pesquisa->faixaDois[i], " ")){
-            for(int j = i + 1; j < pesquisa->contFaixaDois; j++){
-                if( compStr(pesquisa->faixaDois[i], pesquisa->faixaDois[j]) ) {
-                    cont1++;
-                    strcpy(pesquisa->faixaDois[j], " ");
-                }
-            }
-            if(cont1 > cont2){
-                cont2 = cont1;
-                strcpy(vencedor, pesquisa->faixaDois[i]); 
-            }
-        }
-    }
-
-    fprintf(arqDadosClinica," 26 -  50  %s", vencedor);
-    
-}
-
-//SO PARA TESTES
-void exibeFaixaTres(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
-    int cont1 = 0, cont2 = 0;
-    char vencedor[dim] = " ";
-    for(int i = 0; i < pesquisa->contFaixaTres; i++){
-        
-        if(!compStr(pesquisa->faixaTres[i], " ")){
-            for(int j = i + 1; j < pesquisa->contFaixaTres; j++){
-                if( compStr(pesquisa->faixaTres[i], pesquisa->faixaTres[j]) ) {
-                    cont1++;
-                    strcpy(pesquisa->faixaTres[j], " ");
-                }
-            }
-            if(cont1 > cont2){
-                cont2 = cont1;
-                strcpy(vencedor, pesquisa->faixaTres[i]); 
-            }
-        }
-    }
-
-    fprintf(arqDadosClinica, " 51 -  75  %s", vencedor);
-    
-}
-
-//SO PARA TESTES
-void exibeFaixaQuatro(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
-    int cont1 = 0, cont2 = 0;
-    char vencedor[dim] = " ";
-    for(int i = 0; i < pesquisa->contFaixaQuatro; i++){
-        
-        if(!compStr(pesquisa->faixaQuatro[i], " ")){
-            for(int j = i + 1; j < pesquisa->contFaixaQuatro; j++){
-                if( compStr(pesquisa->faixaQuatro[i], pesquisa->faixaQuatro[j]) ) {
-                    cont1++;
-                    strcpy(pesquisa->faixaQuatro[j], " ");
-                }
-            }
-            if(cont1 > cont2){
-                cont2 = cont1;
-                strcpy(vencedor, pesquisa->faixaQuatro[i]); 
-            }
-        }
-    }
-
-    fprintf(arqDadosClinica, " 76 - 100  %s", vencedor);
-    
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 void preencheMedico(agMedico *medico, FILE *arqEntrada, FILE *arqLista, FILE *arqSaida, agFaixaEtaria *atualizacao){
@@ -414,6 +177,7 @@ void preencheMedico(agMedico *medico, FILE *arqEntrada, FILE *arqLista, FILE *ar
 
 }
 
+
 void escreveDadosMedico(FILE *arqEntrada, FILE *arqSaida, agMedico *medico){
   /*escreve o nome do medico no arquivo de saida*/
   fprintf(arqSaida, "%s", medico->nome);
@@ -435,6 +199,8 @@ void escreveDadosMedico(FILE *arqEntrada, FILE *arqSaida, agMedico *medico){
 
   medico->consultas = 0;
 }
+
+
 
 void preencheMatriz(agMedico *medico, agMedico *copia){
 
@@ -460,88 +226,6 @@ void preencheMatriz(agMedico *medico, agMedico *copia){
         }
     }
 }
-
-void marcaHorario(FILE *arqLista, agMedico *medico, agFaixaEtaria *atualizacao){
-
-    /*variaveis q serão utilizados na questão
-
-    nomeMedico ira armazenar o nome do medico do loop em questão
-
-    lixo[dim] é apenar para guardar arquivos q n serão úteis
-
-    id será o id do paciente extraido do arqLista para a
-    matriz da semana do medico em questão desse loop
-    */
-    char nomeMedico[dim], lixo[dim];
-    int id, idade;
-
-    /*geração de seed aleatoria para o rand baseada
-    no tempo de execução do codigo*/
-    srand(time(NULL) );
-
-    /*loop para percorrer todo o arquivo listaPacientesSemana*.txt
-  com o objetivo de marcar as consultas em cada medico.
-  essa função extrair as consultas de um medico especifico em uma
-  semana especifica
-  o que significa q para cada execução da função marcaHorarios
-  uma lista de consultas para uma semana especifica ira ser colocada
-  em um agMedico medico->agenda especifico
-   */
-    while(! feof(arqLista) ){
-
-        /*essa função irá percorrer o arquivo listaPc*/
-        obterPaciente(arqLista, nomeMedico, lixo, &id, &idade);
-
-        if(compStr(nomeMedico, medico->nome)){
-            medico->consultas+=1;
-            medico->contEspecialidade+=1;
-
-            pesquisaDeFaixaEtaria( idade, medico->especialidade, atualizacao);
-
-            aleatorio(medico, id);
-        }
-
-        fgets(lixo, 30, arqLista);
-
-    }
-}
-
-void copiaMatriz(agMedico *medico, agMedico *copia){
-
-  /*faz um loop para percorrer medico->agenda e
-  e substituir todos os seus valores pelos valores presentes
-  em copia*/
-  for(int ho = 0; ho < h; ho++){
-
-      for(int di = 0; di < d; di++){
-
-          if(ho == 4){
-              copia->agenda[ho][di] = medico->agenda[ho][di];
-          }else{
-              medico->agenda[ho][di] = copia->agenda[ho][di];
-          }
-      }
-   }
-}
-
-
-void nomeLista(char *nomeArq, int semana){
-
-  char fimNome[5];
-
-  strcpy(fimNome, " .txt");
-  fimNome[0] = semana + 48;
-
-  /*copia do inicio de nome de cada arquivo para a atualização
-  do arquivo q deve ser lido*/
-  strcpy(nomeArq, "entrada/listaPacientesSemana");
-
-  /*concatenação do inicio do nome da parte que varia, ou seja o
-  numero da semana*/
-  strcat(nomeArq, fimNome);
-
-}
-
 void diasOcupados(agMedico *medico, FILE *arqMedico, agMedico *copia){
 
     /*anuncio das varaveis q serão usadas nessa
@@ -601,6 +285,124 @@ void diasOcupados(agMedico *medico, FILE *arqMedico, agMedico *copia){
 
 
 }
+void nomeLista(char *nomeArq, int semana){
+
+  char fimNome[5];
+
+  strcpy(fimNome, " .txt");
+  fimNome[0] = semana + 48;
+
+  /*copia do inicio de nome de cada arquivo para a atualização
+  do arquivo q deve ser lido*/
+  strcpy(nomeArq, "entrada/listaPacientesSemana");
+
+  /*concatenação do inicio do nome da parte que varia, ou seja o
+  numero da semana*/
+  strcat(nomeArq, fimNome);
+
+}
+
+
+void marcaHorario(FILE *arqLista, agMedico *medico, agFaixaEtaria *atualizacao){
+
+    /*variaveis q serão utilizados na questão
+
+    nomeMedico ira armazenar o nome do medico do loop em questão
+
+    lixo[dim] é apenar para guardar arquivos q n serão úteis
+
+    id será o id do paciente extraido do arqLista para a
+    matriz da semana do medico em questão desse loop
+    */
+    char nomeMedico[dim], lixo[dim];
+    int id, idade;
+
+    /*geração de seed aleatoria para o rand baseada
+    no tempo de execução do codigo*/
+    srand(time(NULL) );
+
+    /*loop para percorrer todo o arquivo listaPacientesSemana*.txt
+  com o objetivo de marcar as consultas em cada medico.
+  essa função extrair as consultas de um medico especifico em uma
+  semana especifica
+  o que significa q para cada execução da função marcaHorarios
+  uma lista de consultas para uma semana especifica ira ser colocada
+  em um agMedico medico->agenda especifico
+   */
+    while(! feof(arqLista) ){
+
+        /*essa função irá percorrer o arquivo listaPc*/
+        obterPaciente(arqLista, nomeMedico, lixo, &id, &idade);
+
+        if(compStr(nomeMedico, medico->nome)){
+            medico->consultas+=1;
+            medico->contEspecialidade+=1;
+
+            pesquisaDeFaixaEtaria( idade, medico->especialidade, atualizacao);
+
+            aleatorio(medico, id);
+        }
+
+        fgets(lixo, 30, arqLista);
+
+    }
+}
+void obterPaciente(FILE *arqLista, char *nomeMedico, char *lixo, int *id, int *idade){
+    fgets(lixo, 30, arqLista);
+    fscanf( arqLista ,"%d\n", id);
+    fgets(lixo, 30, arqLista);
+    fscanf(arqLista, "%d %d %d\n", idade, idade, idade);
+    fgets(nomeMedico, dim, arqLista);
+}
+void aleatorio(agMedico *medico, int id){
+
+    /*A função "copiaMatriz" simplesmente transforma a matriz que foi preenchida em "marcaHorario" na matriz
+de horarios daquele medico em questão antes de ser preenchida com os id's dos pacientes, para que assim possa ser utilizada
+no proximo loop, que dará origem a matriz de horarios da proxima semana.*/
+
+
+    int hora =  rand()%9;
+    int dia = rand()%4;
+
+    if(medico->agenda[dia][hora] != 0){
+
+        while(medico->agenda[dia][hora] != id){
+
+            hora =  rand()%9;
+            dia = rand()%4;
+
+            if(medico->agenda[dia][hora] == 0){
+
+                medico->agenda[dia][hora] = id;
+            }
+        }
+    }else{
+        medico->agenda[dia][hora] = id;
+    }
+
+}
+
+
+void copiaMatriz(agMedico *medico, agMedico *copia){
+
+  /*faz um loop para percorrer medico->agenda e
+  e substituir todos os seus valores pelos valores presentes
+  em copia*/
+  for(int ho = 0; ho < h; ho++){
+
+      for(int di = 0; di < d; di++){
+
+          if(ho == 4){
+              copia->agenda[ho][di] = medico->agenda[ho][di];
+          }else{
+              medico->agenda[ho][di] = copia->agenda[ho][di];
+          }
+      }
+   }
+}
+
+
+
 
 //SOMENTE PARA TESTE
 void exebeMatriz(agMedico *medico, FILE *arqSaida){
@@ -624,67 +426,4 @@ void exebeMatriz(agMedico *medico, FILE *arqSaida){
         }
         printf("\n");
     }
-}
-
-void aleatorio(agMedico *medico, int id){
-
-    int hora =  rand()%9;
-    int dia = rand()%4;
-
-    if(medico->agenda[dia][hora] != 0){
-
-        while(medico->agenda[dia][hora] != id){
-
-            hora =  rand()%9;
-            dia = rand()%4;
-
-            if(medico->agenda[dia][hora] == 0){
-
-                medico->agenda[dia][hora] = id;
-            }
-        }
-    }else{
-        medico->agenda[dia][hora] = id;
-    }
-
-}
-
-void obterPaciente(FILE *arqLista, char *nomeMedico, char *lixo, int *id, int *idade){
-    fgets(lixo, 30, arqLista);
-    fscanf( arqLista ,"%d\n", id);
-    fgets(lixo, 30, arqLista);
-    fscanf(arqLista, "%d %d %d\n", idade, idade, idade);
-    fgets(nomeMedico, dim, arqLista);
-}
-
-  /*essa função está sendo usada para substituir a strcmp
-  pois a strcmp ela não estava funcionando devidamente para as necessidades
-  da dupla*/
-int compStr(char *str, char *str1){
-
-    /*variaveis necessárias para a função
-
-    int cont irá acumular aquantidade de letras iguais
-    de ambas as strings
-
-    i irá acumular o tamanho da str em questão
-    */
-    int cont = 0, i = 0;
-
-    /*o for irá percorrer as duas strings ate até q a primeira
-    acabe, também poderia ser ate a segunda acabar.*/
-    for(i = 0; str[i] != '\0'; i++){
-        /*ira comprar posição a posição da matriz*/
-        if(str[i] == str1[i]){
-            cont ++;
-        }
-    }
-
-    if(cont == i){
-        /*retorna '1' caso as strings sejam iguais*/
-        return 1;
-    }
-
-    /*retorna '0' caso as strings sejam diferentes*/
-    return 0;
 }
