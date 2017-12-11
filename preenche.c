@@ -361,29 +361,27 @@ void obterPaciente(FILE *arqLista, cliente *paciente){
     fgets(saltarLinha, 30, arqLista);
 }
 void aleatorio(agMedico *medico, cliente *paciente){
-
-    /*A função "copiaMatriz" simplesmente transforma a matriz que foi preenchida em "marcaHorario" na matriz
+/*A função "copiaMatriz" simplesmente transforma a matriz que foi preenchida em "marcaHorario" na matriz
 de horarios daquele medico em questão antes de ser preenchida com os id's dos pacientes, para que assim possa ser utilizada
 no proximo loop, que dará origem a matriz de horarios da proxima semana.*/
-
 
     int hora =  rand()%9;
     int dia = rand()%4;
 
-    if(medico->agenda[dia][hora] != 0){
+    if(medico->agenda[hora][dia] != 0){
 
-        while(medico->agenda[dia][hora] != paciente->id){
+        while(medico->agenda[hora][dia] != paciente->id){
 
             hora =  rand()%9;
             dia = rand()%4;
 
-            if(medico->agenda[dia][hora] == 0){
+            if(medico->agenda[hora][dia] == 0){
 
-                medico->agenda[dia][hora] = paciente->id;
+                medico->agenda[hora][dia] = paciente->id;
             }
         }
     }else{
-        medico->agenda[dia][hora] = paciente->id;
+        medico->agenda[hora][dia] = paciente->id;
     }
 
 }
@@ -433,3 +431,7 @@ void copiaMatriz(agMedico *medico, agMedico *copia){
         printf("\n");
     }
 }*/
+
+
+
+//void funcTeste()
