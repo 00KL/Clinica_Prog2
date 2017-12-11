@@ -1,0 +1,135 @@
+Daniel Pinheiro
+12345
+ortopedista
+2a 14 15 17
+6a 09 10 11
+
+Goku Tavares Batista
+23456
+neurologista
+3a 15 16
+4a 08 09 10 11
+6a 17
+
+Carolina Cavalcanti Cunha
+84563
+cardiologista
+2a 15 16 17
+
+Anna Ferreira Silva
+10000
+ortopedista
+3a 08 16 17
+4a 09 13 14
+5a 10 11 13
+
+Marcos Barbosa Ribeiro
+24126
+gastro
+5a 08 09 16 17
+6a 08 09 10 11 13 14 15 16 17
+
+Giovana Goncalves Araujo
+23654
+neurologista
+2a 13 14 15
+3a 09 10 11
+6a 10 11 13
+
+Rafael Oliveira Araujo
+12434
+clinico geral
+4a 13 14 15 16 17
+6a 08 09 10
+
+Carlos Cardoso Costa
+34573
+clinico geral
+2a 09 10
+3a 13 14 15
+4a 10 11
+5a 16 17
+
+Brenda Carvalho Costa
+34623
+cardiologista
+2a 15 16 17
+4a 15 16 17
+6a 08 09 10 11
+
+Julian Gomes Cavalcanti
+45723
+gastro
+3a 13 14
+4a 09 11
+5a 10 11 13 14
+
+Leonardo Azevedo Martins
+54623
+ginecologista
+2a 15 16 17
+5a 08 09 10 11
+6a 11 13
+
+Kaua Lima Santos
+12446
+dermatologista
+4a 13 14 15 16 17
+5a 08 09
+6a 14 17
+
+Carolina Souza Rocha
+34531
+urologista
+2a 08 09 10
+3a 13 14
+6a 11
+
+Bruno Santos Alves
+45764
+gastro
+3a 14 15
+4a 10 11 13
+5a 15 17
+
+Guilherme Cardoso Carvalho
+45732
+ginecologista
+2a 14
+3a 16 17
+6a 11 13 15
+
+Douglas Azevedo Ferreira
+23462
+clinico geral
+5a 09 10 14 16 17
+6a 10 11 15 16 17
+
+Miguel Pinto Castro
+34631
+urologista
+3a 16 17
+5a 08 09 10
+6a 15 16 17
+
+Caio Correia Dias
+36232
+cardiologista
+2a 16 17
+4a 09 13 17
+5a 10 11
+
+Luís Gomes Araujo
+34633
+neurologista
+2a 16 17
+3a 08 09
+4a 14 16
+6a 09 10 15 17
+
+Beatriz Dias Silva
+34763
+ginecologista
+4a 09 10 17
+5a 15 16 17
+6a 08 09 10 11
