@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
 
 //Arquivos necessários por conter
 //funções relevantes para o funcionamento
@@ -6,7 +11,7 @@
 //A ordem em q cada um dos arquivos são chamadas
 //é TOTALMENTE RELEVANTE, pois ao chamar structs.c
 //antes de colocar.c e criaDadosPacientes.c permite
-//que os structs sejam acessiveis para colocar.c e 
+//que os structs sejam acessiveis para colocar.c e
 //criaDadosPacientes.c
 #include "structs.c"
 #include "semanas.c"
@@ -14,7 +19,7 @@
 #include "criaDadosPacientes.c"
 
 
-void preencheMedico(agMedico *, FILE *, FILE *, FILE *, agFaixaEtaria *);
+void preencheMedico(agMedico *, FILE *, FILE *, FILE *, agFaixaEtaria *, cliente *);
 
 void escreveDadosMedico(FILE *, FILE *, agMedico *);
 
@@ -24,18 +29,18 @@ void diasOcupados(agMedico *, FILE *, agMedico *);
 
 void preencheMatriz(agMedico *, agMedico *);
 
-void marcaHorario(FILE *, agMedico *, agFaixaEtaria *);
-void obterPaciente(FILE *, char *, char *, int *, int *);
-void aleatorio(agMedico *, int);
+void marcaHorario(FILE *, agMedico *, agFaixaEtaria *, cliente *);
+void obterPaciente(FILE *, cliente *);
+void aleatorio(agMedico *, cliente *);
 
 
 void copiaMatriz(agMedico *, agMedico *);
 
 //SO PARA TESTES
-void exebeMatriz(agMedico *, FILE *arqSaida);
+//void exebeMatriz(agMedico *, FILE *arqSaida);
 
 
-void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista, agFaixaEtaria *resultado, agFaixaEtaria *atualizacao){
+void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista, agFaixaEtaria *resultado, agFaixaEtaria *atualizacao, cliente *paciente){
 
     iniciaFaixaEtaria(resultado);
 
@@ -69,8 +74,8 @@ void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista, agFaixaEta
     e por isso é necessário negar sua saida no argumento
     do loop*/
     while(! feof(arqEntrada)){
-        
-        preencheMedico(medico, arqEntrada, arqLista, arqSaida, atualizacao);
+
+        preencheMedico(medico, arqEntrada, arqLista, arqSaida, atualizacao,paciente);
 
         /*extrai o medico mais popular*/
         medicoPopular(maisProcurados, medico, &maisConsultas);
@@ -78,13 +83,13 @@ void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista, agFaixaEta
         /*extrai e organiza as especialidades em mais procuradas*/
         especialidadesPopulares(especialidades, medico, &especialidadeMaisProcurada);
     }
-    
+
     criaDadosPacientes(maisProcurados, especialidades, atualizacao);
-    
+
 }
 
 
-void preencheMedico(agMedico *medico, FILE *arqEntrada, FILE *arqLista, FILE *arqSaida, agFaixaEtaria *atualizacao){
+void preencheMedico(agMedico *medico, FILE *arqEntrada, FILE *arqLista, FILE *arqSaida, agFaixaEtaria *atualizacao, cliente *paciente){
     /*Variaveis necessárias para a função
 
     agMedico copia esta servindo para armazenar uma copia
@@ -151,7 +156,7 @@ void preencheMedico(agMedico *medico, FILE *arqEntrada, FILE *arqLista, FILE *ar
     estabelecidos no arqLista
      */
     for(int semana = 1; semana < 5; semana++){
-    
+
       /*cria nome devido para o arquivo do loop em questão*/
       nomeLista(nomeArq, semana);
 
@@ -163,7 +168,7 @@ void preencheMedico(agMedico *medico, FILE *arqEntrada, FILE *arqLista, FILE *ar
       }
 
 
-      marcaHorario(arqLista, medico, atualizacao);
+      marcaHorario(arqLista, medico, atualizacao,paciente);
 
       //exebeMatriz(medico, arqSaida);
 
@@ -303,7 +308,7 @@ void nomeLista(char *nomeArq, int semana){
 }
 
 
-void marcaHorario(FILE *arqLista, agMedico *medico, agFaixaEtaria *atualizacao){
+void marcaHorario(FILE *arqLista, agMedico *medico, agFaixaEtaria *atualizacao, cliente *paciente){
 
     /*variaveis q serão utilizados na questão
 
@@ -314,8 +319,8 @@ void marcaHorario(FILE *arqLista, agMedico *medico, agFaixaEtaria *atualizacao){
     id será o id do paciente extraido do arqLista para a
     matriz da semana do medico em questão desse loop
     */
-    char nomeMedico[dim], lixo[dim];
-    int id, idade;
+    /*char nomeMedico[dim], lixo[dim];
+    int id, idade;*/
 
     /*geração de seed aleatoria para o rand baseada
     no tempo de execução do codigo*/
@@ -332,29 +337,30 @@ void marcaHorario(FILE *arqLista, agMedico *medico, agFaixaEtaria *atualizacao){
     while(! feof(arqLista) ){
 
         /*essa função irá percorrer o arquivo listaPc*/
-        obterPaciente(arqLista, nomeMedico, lixo, &id, &idade);
+        obterPaciente(arqLista, paciente);
 
-        if(compStr(nomeMedico, medico->nome)){
+        if(compStr(paciente->medico, medico->nome)){
             medico->consultas+=1;
             medico->contEspecialidade+=1;
 
-            pesquisaDeFaixaEtaria( idade, medico->especialidade, atualizacao);
+            pesquisaDeFaixaEtaria( paciente->idade, medico->especialidade, atualizacao);
 
-            aleatorio(medico, id);
+            aleatorio(medico, paciente);
         }
-
-        fgets(lixo, 30, arqLista);
 
     }
 }
-void obterPaciente(FILE *arqLista, char *nomeMedico, char *lixo, int *id, int *idade){
-    fgets(lixo, 30, arqLista);
-    fscanf( arqLista ,"%d\n", id);
-    fgets(lixo, 30, arqLista);
-    fscanf(arqLista, "%d %d %d\n", idade, idade, idade);
-    fgets(nomeMedico, dim, arqLista);
+void obterPaciente(FILE *arqLista, cliente *paciente){
+  char saltarLinha[dim];
+
+    fgets(paciente->nome, 30, arqLista);
+    fscanf( arqLista ,"%d\n", &paciente->id);
+    fgets(paciente->fone, 30, arqLista);
+    fscanf(arqLista, "%d %d %d\n", &paciente->idade, &paciente->idade,&paciente->idade);
+    fgets(paciente->medico, dim, arqLista);
+    fgets(saltarLinha, 30, arqLista);
 }
-void aleatorio(agMedico *medico, int id){
+void aleatorio(agMedico *medico, cliente *paciente){
 
     /*A função "copiaMatriz" simplesmente transforma a matriz que foi preenchida em "marcaHorario" na matriz
 de horarios daquele medico em questão antes de ser preenchida com os id's dos pacientes, para que assim possa ser utilizada
@@ -366,18 +372,18 @@ no proximo loop, que dará origem a matriz de horarios da proxima semana.*/
 
     if(medico->agenda[dia][hora] != 0){
 
-        while(medico->agenda[dia][hora] != id){
+        while(medico->agenda[dia][hora] != paciente->id){
 
             hora =  rand()%9;
             dia = rand()%4;
 
             if(medico->agenda[dia][hora] == 0){
 
-                medico->agenda[dia][hora] = id;
+                medico->agenda[dia][hora] = paciente->id;
             }
         }
     }else{
-        medico->agenda[dia][hora] = id;
+        medico->agenda[dia][hora] = paciente->id;
     }
 
 }
@@ -405,7 +411,7 @@ void copiaMatriz(agMedico *medico, agMedico *copia){
 
 
 //SOMENTE PARA TESTE
-void exebeMatriz(agMedico *medico, FILE *arqSaida){
+/*void exebeMatriz(agMedico *medico, FILE *arqSaida){
 
     for(int ho = 0; ho < h; ho++){
         for(int di = 0; di < d; di++){
@@ -426,4 +432,4 @@ void exebeMatriz(agMedico *medico, FILE *arqSaida){
         }
         printf("\n");
     }
-}
+}*/

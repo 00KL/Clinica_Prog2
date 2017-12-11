@@ -13,10 +13,19 @@ typedef struct {
 
     char especialidade[dim];
     int contEspecialidade;
-    
+
     int agenda[h][d];
     int consultas;
 } agMedico;
+
+//Cliente
+typedef struct {
+    char nome[dim];
+    int id;
+    char fone[dim];
+    int idade;
+    char medico[dim];
+} cliente;
 
 //Faixa etária
 typedef struct {
