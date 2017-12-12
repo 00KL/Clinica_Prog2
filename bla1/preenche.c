@@ -20,6 +20,8 @@
 
 void teste();
 
+void escreveArqMedico(agMedico *, FILE *, FILE *);
+
 void preencheMedico(agMedico *, FILE *, FILE *, FILE *, agFaixaEtaria *, cliente *);
 
 void escreveDadosMedico(FILE *, FILE *, agMedico *);
@@ -438,8 +440,8 @@ void exebeMatriz(agMedico *medico){
 
 void teste(){
   agMedico medico[dim];
-  FILE *arqEntrada, *arqLista, *arqSaida;
-  char nomeArq[dim],teste[dim];
+  FILE *arqEntrada, *arqLista, *arqSaida, *lixo;
+  char nomeArqLista[dim] = " ",teste[dim];
   agFaixaEtaria atualizacao;
   cliente paciente;
 
@@ -450,7 +452,7 @@ void teste(){
   for(int semana = 1; semana < 5; semana++){
 
       /*cria nome devido para o arquivo do loop em questão*/
-      nomeLista(nomeArq, semana);
+      nomeLista(nomeArqLista, semana);
 
       /*lê o arquivo cujo nome esta armazenado em nomeArq e checa se há
       algum erro na leitura*/
@@ -465,20 +467,23 @@ void teste(){
     }
 
     for(int i=0; ! feof(arqEntrada); i++){
-        fgets(medico[i].nome, dim, arqEntrada);
 
-        fscanf(arqEntrada,"%d\n", &medico[i].id);
-        fgets(medico[i].especialidade, dim, arqEntrada);
+        if (!(arqLista = fopen(nomeArqLista, "r"))){
+          //printf("%s \n", nomeArqLista);
+          exit(1);
+        }
+
+        if(semana == 1){
+            escreveArqMedico(&medico[i],arqSaida,arqEntrada);
+        }
+        else{
+            escreveArqMedico(&medico[i],lixo,arqEntrada);
+        }
+
         diasOcupados(&medico[i],arqEntrada);
 
-        if (!(arqLista = fopen(nomeArq, "r"))){
-          printf("%s \nERRO3 \n", nomeArq);
-          exit(1);
-      }
-
-
         marcaHorario(arqLista, &medico[i], &atualizacao, &paciente);
-        //escreveMatriz(&medico[i],arqSaida,semana);
+        escreveMatriz(&medico[i],arqSaida,semana);
         fclose(arqLista);
     }
     fclose(arqEntrada);
@@ -490,4 +495,41 @@ void teste(){
       exebeMatriz(&medico[j]);
     }
   }
+}
+
+
+void escreveArqMedico(agMedico *medico, FILE *arqSaida, FILE *arqEntrada){
+    char nomeArq[dim+5],nomeM[dim];
+
+    fgets(medico->nome, dim, arqEntrada);
+
+    /*ira substituir o valor armazenado em nomeM
+    pelo valor presente em medico->nome*/
+    strcpy(nomeM,medico->nome);
+    /*é adicionado a ultima posição de nomeM, q no momento é '\n'
+    por conta da saida padrão da função "gets",  o valor de '.'
+    que fará parte do nome do arquivo com final ".txt"*/
+    nomeM[ strlen(medico->nome) - 1 ] = '.' ;
+
+    /*ira substituir o valor armazenado em nomeArq por
+    "saida/", q será o inicio do arquivo onde será
+    gravada a saida do programa*/
+    strcpy(nomeArq, "saida/");
+    /*irá concatenar os valore presentes em nomeArq
+    com os valores presentes em nomeM*/
+    strcat(nomeArq, nomeM);
+    /*irá concatenar os valores presentes em nomeArq
+    com o texto "txt"*/
+    strcat(nomeArq, "txt");
+
+    /*leitura do nome do arquivo q deve ser criado com o nome do medico
+    no loop atual, junto com um teste de um possivel erro de criação*/
+    if (!(arqSaida = fopen (nomeArq, "a+"))){
+        printf("ERRO 4 \n");
+        exit(1);
+    }
+
+    /*escreve os dados iniciais dos medicos
+    no arquivo saida*/
+    escreveDadosMedico(arqEntrada, arqSaida, medico);
 }
