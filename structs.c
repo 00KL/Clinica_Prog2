@@ -29,17 +29,9 @@ typedef struct {
 
 //Faixa etária
 typedef struct {
-    char faixaUm[dim][dim];
-    int contFaixaUm;
+    char faixa[4][dim][dim];
+    int contFaixa[4];
 
-    char faixaDois[dim][dim];
-    int contFaixaDois;
-
-    char faixaTres[dim][dim];
-    int contFaixaTres;
-
-    char faixaQuatro[dim][dim];
-    int contFaixaQuatro;
 } agFaixaEtaria;
 
 //N será necessário exibir para o usuário
