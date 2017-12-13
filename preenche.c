@@ -40,9 +40,7 @@ void copiaMatriz(agMedico *, agMedico *);
 //void exebeMatriz(agMedico *, FILE *arqSaida);
 
 
-void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista, agFaixaEtaria *resultado, agFaixaEtaria *atualizacao, cliente *paciente){
-
-    iniciaFaixaEtaria(resultado);
+void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista, agFaixaEtaria *atualizacao, cliente *paciente){
 
     //Variaveis necessarias
     FILE *arqSaida;
@@ -51,7 +49,6 @@ void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista, agFaixaEta
     char maisProcurados[100], especialidades[100] = {0};
 
     iniciaFaixaEtaria(atualizacao);
-    iniciaFaixaEtaria(resultado);
 
     /*to achando q vamos ter q criar um vetor
     de structs para as proximas questões...*/
