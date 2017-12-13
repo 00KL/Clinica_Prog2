@@ -1,4 +1,4 @@
-#include <stdio.h>
+ #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -23,6 +23,10 @@ void teste();
 void escreveArqMedico(agMedico *, int);
 
 void resetVetorPacientes(cliente *);
+
+void vetorMedico(FILE *, agMedico *, int *);
+
+void retiraEspacos(char *);
 
 void preencheMedico(agMedico *, FILE *, FILE *, FILE *, agFaixaEtaria *, cliente *);
 
@@ -341,7 +345,7 @@ void marcaHorario(FILE *arqLista, agMedico *medico, agFaixaEtaria *atualizacao, 
   uma lista de consultas para uma semana especifica ira ser colocada
   em um agMedico medico->agenda especifico
    */
-    for(int i=0; i < dim; i++){
+    for(int i=0; i < 99; i++){
 
         /*essa função irá percorrer o arquivo listaPc*/
         //obterPaciente(arqLista, paciente);
@@ -357,6 +361,7 @@ void marcaHorario(FILE *arqLista, agMedico *medico, agFaixaEtaria *atualizacao, 
         }
 
     }
+
 }
 void obterPaciente(FILE *arqLista, cliente *paciente){
   char saltarLinha[dim];
@@ -442,18 +447,36 @@ void exebeMatriz(agMedico *medico){
 
 
 void teste(){
-  agMedico medico[dim];
-  cliente pacientes[dim];
-  FILE *arqEntrada, *arqLista;
-  char nomeArq[dim];
+  agMedico medico[99];
+  cliente pacientes[99];
   agFaixaEtaria atualizacao;
 
+  /*arqEntrada e arqLista são respectivamente os arquivos com dados dos medicos
+  e dados dos pacientes de cada semana*/
+  FILE *arqEntrada, *arqLista;
+
+  /*nomeArq é uma string que será modificada para que seja possivel abrir
+  o arquivo de cada semana.
+  nMedicos é uma variavel que armazena o número de medicos existe*/
+  char nomeArq[dim];
+  int nMedicos;
+
+  if (!(arqEntrada = fopen ("entrada/dadosMedicos.txt", "r"))){
+      printf("ERRO1\n");
+      exit(1);
+  }
+  //Preenchimento do vetor de medicos.
+  vetorMedico(arqEntrada,medico,&nMedicos);
+
+  fclose(arqEntrada);
 
   for(int semana = 4; semana > 0; semana--){
 
+    /*Reseta o vetor de pacientes para ser usado abaixo sem causar acumulos de id
+     entre as semanas*/
     resetVetorPacientes(pacientes);
 
-      /*cria nome devido para o arquivo do loop em questão*/
+    /*cria nome devido para o arquivo do loop em questão*/
     nomeLista(nomeArq, semana);
 
     if (!(arqLista = fopen(nomeArq, "r"))){
@@ -461,32 +484,36 @@ void teste(){
       exit(1);
     }
 
+    /*O for abaixo lê o arquivo da semana e adiciona os dados dos pacientes ao vetor*/
     for(int k=0; ! feof(arqLista); k++){
       obterPaciente(arqLista,&pacientes[k]);
     }
     fclose(arqLista);
 
 
-    if (!(arqEntrada = fopen ("entrada/dadosMedicos.txt", "r"))){
-        printf("ERRO1\n");
-        exit(1);
-    }
+    for(int i=0; i < nMedicos ; i++){
 
-    for(int i=0; ! feof(arqEntrada) ; i++){
-
-        fgets(medico[i].nome, dim, arqEntrada);
-        fscanf(arqEntrada,"%d\n", &medico[i].id);
-        fgets(medico[i].especialidade, dim, arqEntrada);
-
-        diasOcupados(&medico[i],arqEntrada);
-
+        //marcação de horarios na matriz da agenda dos medicos.
         marcaHorario(arqLista, &medico[i], &atualizacao, pacientes);
-
+        //função que cria e escreve os arquivos de saída com os horarios do medicos.
         escreveArqMedico(&medico[i] ,semana);
 
-      }
-    fclose(arqEntrada);
+    }
   }
+}
+
+/*Função que preenche o vetor de medicos */
+void vetorMedico(FILE *arqEntrada, agMedico *medico, int *nMedicos){
+  int contador;
+
+  for(contador=0; ! feof(arqEntrada) ; contador++){
+    fgets(medico[contador].nome, dim, arqEntrada);
+    fscanf(arqEntrada,"%d\n", &medico[contador].id);
+    fgets(medico[contador].especialidade, dim, arqEntrada);
+
+    diasOcupados(&medico[contador],arqEntrada);
+  }
+  *nMedicos=contador;
 }
 
 void escreveArqMedico(agMedico *medico, int semana){
@@ -510,8 +537,13 @@ void escreveArqMedico(agMedico *medico, int semana){
     strcat(nomeArq, nomeM);
     /*irá concatenar os valores presentes em nomeArq
     com o texto "txt"*/
-    strcat(nomeArq, "txt");
 
+    strcat(nomeArq, "txt");
+    printf("%s\n",nomeArq );
+
+    retiraEspacos(nomeArq);
+    printf("%s\n",nomeArq);
+    printf("\n");
 
     /* O if abaixo verifica se a semana é a primeira e caso
     seja satisfeito ele cria o arquivo de saida com o nome
@@ -537,10 +569,16 @@ void escreveArqMedico(agMedico *medico, int semana){
 
     arqSaida = fopen(nomeArq, "a+");
 
+
+    /*if(compStr("Joao Silva da Costa",medico->nome)){
+      exebeMatriz(medico);
+      printf("\n");
+    }*/
     escreveMatriz(medico,arqSaida,semana);
 
   }
-/*a função abaixo reseta os valores do vetor de pacientes
+
+/*A função abaixo reseta os valores do vetor de pacientes
 para que não apareçam id's na matriz de horarios que nao sejam
 da semana correspondente, pois o vetor de clientes é lido e
 amazenado por semana. Depois da primeiro leitura o vetor é sobrescrito
@@ -553,5 +591,24 @@ void resetVetorPacientes(cliente *pacientes){
     strcpy(pacientes[i].fone, " ");
     pacientes[i].idade=0;
     strcpy(pacientes[i].medico, " ");
+  }
+}
+
+/*Função que retira os espaços da string que será usada para criar o
+arquivo com nome do medico*/
+void retiraEspacos(char *nomeArq){
+
+  int tam;
+  tam= strlen(nomeArq);
+
+  for(int i=0; i<tam;i++){
+
+    if(nomeArq[i]==' '){
+
+      for(int j=i; j<tam;j++){
+
+        nomeArq[j]=nomeArq[j+1];
+      }
+    }
   }
 }
