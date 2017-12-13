@@ -10,15 +10,12 @@ void exibeTodasAsFaixas(agFaixaEtaria *, FILE *);
 
 /*como o proprio nome sugere a função só inicia os valores daquelas posiçoes na struct com valor 0, para que
 nao haja erros causados por lixo de memoria*/
-void iniciaFaixaEtaria(agFaixaEtaria *resultado){
+void iniciaFaixaEtaria(agFaixaEtaria *atualizacao){
 
-    resultado->contFaixa[0] = 0;
-
-    resultado->contFaixa[1] = 0;
-
-    resultado->contFaixa[2] = 0;
-
-    resultado->contFaixa[3] = 0;
+    atualizacao[0].contFaixa = 0;
+    atualizacao[1].contFaixa = 0;
+    atualizacao[2].contFaixa = 0;
+    atualizacao[3].contFaixa = 0;
 }
 
 /**/
@@ -36,23 +33,23 @@ void pesquisaDeFaixaEtaria(int idade, char *especialidade, agFaixaEtaria *atuali
         /*os vetores de matrizes q respresentam cada faixa etaria são inicializados aqui
         assim sendo a posição atual esta vazia ou com lixo e deve ser sobreescrita
         com o valor q sera analizado por funçõe posteriores.*/
-        strcpy( ( atualizacao->faixa[0][ atualizacao->contFaixa[0] ] ) , especialidade);
+        strcpy( ( atualizacao[0].faixa[ atualizacao[0].contFaixa ] ) , especialidade);
         /*o valor do contador é atualizado para q na proxima pesquisa seja
         a especialidade seja escrita na posição correta da matriz faixa*/
-        atualizacao->contFaixa[0]+=1;
+        atualizacao[0].contFaixa+=1;
 
     }
     else if( idade < 51){
-        strcpy( ( atualizacao->faixa[1][ atualizacao->contFaixa[1] ] ) , especialidade);
-        atualizacao->contFaixa[1]+=1;
+        strcpy( ( atualizacao[1].faixa[ atualizacao[1].contFaixa ] ) , especialidade);
+        atualizacao[1].contFaixa+=1;
     }
     else if(idade < 76){
-        strcpy( ( atualizacao->faixa[2][ atualizacao->contFaixa[2] ] ) , especialidade);
-        atualizacao->contFaixa[2]+=1;
+        strcpy( ( atualizacao[2].faixa[ atualizacao[2].contFaixa ] ) , especialidade);
+        atualizacao[2].contFaixa+=1;
     }
     else if(idade < 101){
-        strcpy( ( atualizacao->faixa[3][ atualizacao->contFaixa[3] ] ) , especialidade);
-        atualizacao->contFaixa[3]+=1;
+        strcpy( ( atualizacao[3].faixa[ atualizacao[3].contFaixa ] ) , especialidade);
+        atualizacao[3].contFaixa+=1;
 
     }
 
@@ -66,22 +63,22 @@ void exibeTodasAsFaixas(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
 
     for(int faixaEtaria = 0; faixaEtaria < 4; faixaEtaria++){
 
-        for(int especialidade = 0; especialidade < pesquisa->contFaixa[faixaEtaria]; especialidade++){
+        for(int especialidade = 0; especialidade < pesquisa[faixaEtaria].contFaixa; especialidade++){
 
-            if(!compStr(pesquisa->faixa[faixaEtaria][especialidade], " ")){
+            if(!compStr(pesquisa[faixaEtaria].faixa[especialidade], " ")){
 
-                for(int compara = especialidade + 1; compara < pesquisa->contFaixa[faixaEtaria]; compara++){
+                for(int compara = especialidade + 1; compara < pesquisa[faixaEtaria].contFaixa; compara++){
 
-                    if( compStr(pesquisa->faixa[faixaEtaria][especialidade], pesquisa->faixa[faixaEtaria][compara]) ) {
+                    if( compStr(pesquisa[faixaEtaria].faixa[especialidade], pesquisa[faixaEtaria].faixa[compara]) ) {
                         cont1++;
-                          strcpy(pesquisa->faixa[faixaEtaria][compara], " ");
+                          strcpy(pesquisa[faixaEtaria].faixa[compara], " ");
                     }
 
                 }
 
                 if(cont1 > cont2){
                     cont2 = cont1;
-                    strcpy(vencedor, pesquisa->faixa[faixaEtaria][especialidade]);
+                    strcpy(vencedor, pesquisa[faixaEtaria].faixa[especialidade]);
                 }
             }
         }

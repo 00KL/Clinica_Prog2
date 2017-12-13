@@ -50,6 +50,7 @@ void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista, agFaixaEta
 
     iniciaFaixaEtaria(atualizacao);
 
+
     /*to achando q vamos ter q criar um vetor
     de structs para as proximas questões...*/
     //cliente todosOsClientes[100];
