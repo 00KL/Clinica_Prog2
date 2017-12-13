@@ -49,17 +49,16 @@ Para que a matriz esteja alinhada após a impressão é necessario uma formataç
 na matriz de horarios*/
         for(int di = 0; di < d; di++){
 
-          if(medico->agenda[ho][di] == 0){
+         switch (medico->agenda[ho][di]){
+            case 0:fprintf(arqSaida, " %d   ", medico->agenda[ho][di]);
+                   break;
 
-              fprintf(arqSaida, " %d   ", medico->agenda[ho][di]);
+            case -1:fprintf(arqSaida, "%d   ", medico->agenda[ho][di]);
+                    break;
 
-          }else if(medico->agenda[ho][di] == -1){
-
-              fprintf(arqSaida, "%d   ", medico->agenda[ho][di]);
-
-          }else{
-
-              fprintf(arqSaida, "%d  ", medico->agenda[ho][di]);
+            default:fprintf(arqSaida, "%d   ", medico->agenda[ho][di]);
+                    medico->agenda[ho][di]=0;
+                    break;
           }
 
         }
