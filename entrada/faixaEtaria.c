@@ -1,11 +1,7 @@
 //Questão 5
 void iniciaFaixaEtaria(agFaixaEtaria *);
-void exibeFaixaUm(agFaixaEtaria *, FILE *);
-void exibeFaixaDois(agFaixaEtaria *, FILE *);
-void exibeFaixaTres(agFaixaEtaria *, FILE *);
-void exibeFaixaQuatro(agFaixaEtaria *, FILE *);
 void exibeTodasAsFaixas(agFaixaEtaria *, FILE *);
-
+void pesquisaDeFaixaEtaria(int , char *, agFaixaEtaria *);
 
 
 /*como o proprio nome sugere a função só inicia os valores daquelas posiçoes na struct com valor 0, para que
