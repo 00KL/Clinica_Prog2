@@ -54,8 +54,6 @@ void especialidadesPopulares(char *especialidades, agMedico *medico, int *especi
     char atualizaResultado[100];
     char *local;
 
-    //local = strstr(especialidades, medico->especialidade);
-
     if( (*especialidadeMaisProcurada < medico->contEspecialidade) && !(strstr(especialidades, medico->especialidade)) ){
         strcpy(atualizaResultado, especialidades);
         strcpy(especialidades, medico->especialidade);
@@ -64,8 +62,8 @@ void especialidadesPopulares(char *especialidades, agMedico *medico, int *especi
     }
 
     else if( *especialidadeMaisProcurada == medico->contEspecialidade && strstr(especialidades, medico->especialidade) == 0 ){
-        printf("test\n");
         strcat(especialidades, medico->especialidade);
     }
+
 }
 

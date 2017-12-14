@@ -1,0 +1,15 @@
+Dados da Clinica:
+
+Médico mais popular:
+Joao Silva da Costa
+Ana Carolina Maia
+
+Ranking   da   procura   por   especialidades   médicas:
+gastro
+clinico geral
+ 
+Especialidade   mais   procurada   por   faixa   etária:
+  0 -  25  gastro
+ 26 -  50  gastro
+ 51 -  75  clinico geral
+ 76 - 100  clinico geral

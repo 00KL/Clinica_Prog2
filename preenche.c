@@ -26,8 +26,6 @@ void resetVetorPacientes(cliente *);
 
 void vetorMedico(FILE *, agMedico *, int *);
 
-void preencheMedico(agMedico *, FILE *, FILE *, FILE *, agFaixaEtaria *, cliente *);
-
 void escreveDadosMedico(FILE *, agMedico *);
 
 void nomeLista(char *, int);
@@ -40,155 +38,8 @@ void marcaHorario(FILE *, agMedico *, agFaixaEtaria *, cliente *);
 void obterPaciente(FILE *, cliente *);
 void aleatorio(agMedico *, cliente *);
 
-
-void copiaMatriz(agMedico *, agMedico *);
-
 //SO PARA TESTES
 void exebeMatriz(agMedico *);
-
-
-void preencheMedi(agMedico *medico, FILE *arqEntrada, FILE *arqLista, agFaixaEtaria *resultado, agFaixaEtaria *atualizacao, cliente *paciente){
-
-    iniciaFaixaEtaria(resultado);
-
-    //Variaveis necessarias
-    FILE *arqSaida;
-    medico->consultas = 0;
-    int maisConsultas = 0, especialidadeMaisProcurada = 0;
-    char maisProcurados[100], especialidades[100] = {0};
-
-    iniciaFaixaEtaria(atualizacao);
-    iniciaFaixaEtaria(resultado);
-
-    /*to achando q vamos ter q criar um vetor
-    de structs para as proximas questões...*/
-    //cliente todosOsClientes[100];
-
-    //preenchimento de arqEntrada
-    if (!(arqEntrada = fopen ("entrada/dadosMedicos.txt", "r"))){
-        printf("ERRO1\n");
-        exit(1);
-    }
-
-
-    /*Loop para percorrer arqEntrada e extrair as informações
-    necessárias para o enunciado do trabalho
-
-    O loop acaba quando o arquivo entrada/dadosMedicos.txt acabar
-    de ser lido
-
-    A função feof(FILE *) retorna '0' quando o arquivo acaba de ser lido
-    e por isso é necessário negar sua saida no argumento
-    do loop*/
-    while(! feof(arqEntrada)){
-
-        preencheMedico(medico, arqEntrada, arqLista, arqSaida, atualizacao,paciente);
-
-        /*extrai o medico mais popular*/
-        medicoPopular(maisProcurados, medico, &maisConsultas);
-
-        /*extrai e organiza as especialidades em mais procuradas*/
-        especialidadesPopulares(especialidades, medico, &especialidadeMaisProcurada);
-    }
-
-    criaDadosPacientes(maisProcurados, especialidades, atualizacao);
-
-}
-
-
-void preencheMedico(agMedico *medico, FILE *arqEntrada, FILE *arqLista, FILE *arqSaida, agFaixaEtaria *atualizacao, cliente *paciente){
-    /*Variaveis necessárias para a função
-
-    agMedico copia esta servindo para armazenar uma copia
-    dos valores de medico->agenda com o objetivo de reescreve-los
-    ao final do loop q escreve as semanas de cada médico.
-    Isso porque cada semana deve conter suas consultas especificas
-    mas os horarios de almoço e horarios ocupados personalizados de
-    cada medico devem se manter*/
-    agMedico copia;
-    /*nomeArq será o nome do arquivo q deve ser lido
-    a contanstante "dim" esta sendo usada pois todos os medicos
-    terão seus nomes limitados por esse valor, e "+5" porconta do
-    numero da semana e do ".txt"
-
-    ja nomeM tem apaenas dim, pois irá armazenar apenas o nome do
-    medico em questão*/
-    char nomeArq[dim+5],nomeM[dim];
-
-    /*Ira armazenar o nome do medico presente em arqEntrada
-    no struct medico*/
-    fgets(medico->nome, dim, arqEntrada);
-
-    /*ira substituir o valor armazenado em nomeM
-    pelo valor presente em medico->nome*/
-    strcpy(nomeM,medico->nome);
-    /*é adicionado a ultima posição de nomeM, q no momento é '\n'
-    por conta da saida padrão da função "gets",  o valor de '.'
-    que fará parte do nome do arquivo com final ".txt"*/
-    nomeM[ strlen(medico->nome) - 1 ] = '.' ;
-
-    /*ira substituir o valor armazenado em nomeArq por
-    "saida/", q será o inicio do arquivo onde será
-    gravada a saida do programa*/
-    strcpy(nomeArq, "saida/");
-    /*irá concatenar os valore presentes em nomeArq
-    com os valores presentes em nomeM*/
-    strcat(nomeArq, nomeM);
-    /*irá concatenar os valores presentes em nomeArq
-    com o texto "txt"*/
-    strcat(nomeArq, "txt");
-
-    /*leitura do nome do arquivo q deve ser criado com o nome do medico
-    no loop atual, junto com um teste de um possivel erro de criação*/
-    if (!(arqSaida = fopen (nomeArq, "w"))){
-        printf("ERRO \n");
-        exit(1);
-    }
-
-    /*escreve os dados iniciais dos medicos
-    no arquivo saida*/
-    escreveDadosMedico(arqSaida, medico);
-
-    /*preenche medico->agenda e copia->agenda com os '0's e '-1's
-    padrões especeficados para todos os medicos
-    estabelicido no enuncido */
-    //preencheMatriz(medico, &copia);
-
-    /*preenche medico->agenda e copia->agenda com os dias ocupados
-    personalizados de cada medico*/
-    diasOcupados(medico, arqEntrada /*&copia*/);
-
-    /*loop q percorre os arquivos das 4 semanas, extrai seus valores, põe
-    de forma aleatorios os ids de cada paciente nas semanas e medicos
-    estabelecidos no arqLista
-     */
-    for(int semana = 1; semana < 5; semana++){
-
-      /*cria nome devido para o arquivo do loop em questão*/
-      nomeLista(nomeArq, semana);
-
-      /*lê o arquivo cujo nome esta armazenado em nomeArq e checa se há
-      algum erro na leitura*/
-      if (!(arqLista = fopen(nomeArq, "r"))){
-          printf("%s \nERRO3 \n", nomeArq);
-          exit(1);
-      }
-
-
-      marcaHorario(arqLista, medico, atualizacao,paciente);
-
-      //exebeMatriz(medico, arqSaida);
-
-      escreveMatriz(medico, arqSaida, semana);
-
-      copiaMatriz(medico, &copia);
-
-      fclose(arqLista);
-
-    }
-
-}
-
 
 void escreveDadosMedico(FILE *arqSaida, agMedico *medico){
   /*escreve o nome do medico no arquivo de saida*/
@@ -343,19 +194,19 @@ void marcaHorario(FILE *arqLista, agMedico *medico, agFaixaEtaria *atualizacao, 
   uma lista de consultas para uma semana especifica ira ser colocada
   em um agMedico medico->agenda especifico
    */
-    for(int i=0; i < 99; i++){
+    for(int i=0; pacientes[i].id != 0; i++){
 
         /*essa função irá percorrer o arquivo listaPc*/
         //obterPaciente(arqLista, paciente);
 
-        if(compStr(pacientes[i].medico, medico->nome)){
+        if(compStr(pacientes[i].medico, medico->nome) && pacientes[i].id != 0){
             medico->consultas+=1;
             medico->contEspecialidade+=1;
 
             pesquisaDeFaixaEtaria( pacientes[i].idade, medico->especialidade, atualizacao);
 
-            //printf("%s %s\n",medico->nome, pacientes[i].medico);
             aleatorio(medico, &pacientes[i]);
+
         }
 
     }
@@ -375,7 +226,6 @@ void aleatorio(agMedico *medico, cliente *paciente){
 /*A função "copiaMatriz" simplesmente transforma a matriz que foi preenchida em "marcaHorario" na matriz
 de horarios daquele medico em questão antes de ser preenchida com os id's dos pacientes, para que assim possa ser utilizada
 no proximo loop, que dará origem a matriz de horarios da proxima semana.*/
-
     int hora =  rand()%9;
     int dia = rand()%4;
 
@@ -386,35 +236,20 @@ no proximo loop, que dará origem a matriz de horarios da proxima semana.*/
             hora =  rand()%9;
             dia = rand()%4;
 
-            if(medico->agenda[hora][dia] == 0){
-
+            if(medico->agenda[hora][dia] == 0 ){
+                
                 medico->agenda[hora][dia] = paciente->id;
             }
         }
-    }else{
+    }else if(medico->agenda[hora][dia] == 0){
         medico->agenda[hora][dia] = paciente->id;
     }
+    
 
 }
 
 
-void copiaMatriz(agMedico *medico, agMedico *copia){
 
-  /*faz um loop para percorrer medico->agenda e
-  e substituir todos os seus valores pelos valores presentes
-  em copia*/
-  for(int ho = 0; ho < h; ho++){
-
-      for(int di = 0; di < d; di++){
-
-          if(ho == 4){
-              copia->agenda[ho][di] = medico->agenda[ho][di];
-          }else{
-              medico->agenda[ho][di] = copia->agenda[ho][di];
-          }
-      }
-   }
-}
 
 
 
@@ -445,6 +280,17 @@ void exebeMatriz(agMedico *medico){
 
 
 void teste(){
+
+    //test
+    char maisProcurados[100];
+    int maisConsultas;
+    //test
+
+    //test
+    char especialidades[100] = " ";
+    int especialidadeMaisProcurada;
+    //test
+
   agMedico medico[dim];
   cliente pacientes[99];
   FILE *arqEntrada, *arqLista;
@@ -483,10 +329,18 @@ void teste(){
 
         marcaHorario(arqLista, &medico[i], &atualizacao, pacientes);
 
+        medicoPopular(maisProcurados, &medico[i], &maisConsultas);
+
+        especialidadesPopulares(especialidades, &medico[i], &especialidadeMaisProcurada);
+        
         escreveArqMedico(&medico[i] ,semana);
 
     }
+
+    
   }
+
+  criaDadosPacientes(maisProcurados, especialidades, &atualizacao);
 }
 
 /*Função que preenche o vetor de medicos */
@@ -495,7 +349,9 @@ void vetorMedico(FILE *arqEntrada, agMedico *medico, int *nMedicos){
 
   for(contador=0; ! feof(arqEntrada) ; contador++){
     fgets(medico[contador].nome, dim, arqEntrada);
+    
     fscanf(arqEntrada,"%d\n", &medico[contador].id);
+    
     fgets(medico[contador].especialidade, dim, arqEntrada);
 
     diasOcupados(&medico[contador],arqEntrada);
@@ -504,7 +360,7 @@ void vetorMedico(FILE *arqEntrada, agMedico *medico, int *nMedicos){
 }
 
 void escreveArqMedico(agMedico *medico, int semana){
-    char nomeArq[dim+5],nomeM[dim];
+    char nomeArq[dim+5],nomeM[dim] = " ";
     FILE *arqSaida;
 
     /*ira substituir o valor armazenado em nomeM
