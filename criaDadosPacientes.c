@@ -9,10 +9,10 @@
 void especialidadesPopulares(esp *, agMedico *, int, int *);
 
 //Questão 3
-void medicoPopular(char *, agMedico *, int *);
+void medicoPopular(agMedico *, FILE *, int);
 
 //Questão 7
-void criaDadosPacientes(char *, agFaixaEtaria *,esp *, agMedico *, int );
+void criaDadosPacientes(agFaixaEtaria *,esp *, agMedico *, int );
 
 void iniciaVetor(esp *);
 
@@ -22,7 +22,7 @@ void consultasEspSemana(esp *, agMedico *, int , int *);
 
 
 
-void criaDadosPacientes(char *maisProcurados, agFaixaEtaria *atualizacao,esp *vetorEsp, agMedico *medico, int nMedicos){
+void criaDadosPacientes(agFaixaEtaria *atualizacao,esp *vetorEsp, agMedico *medico, int nMedicos){
     FILE *arqDadosClinica;
     int numEsp=0;
 
@@ -32,15 +32,13 @@ void criaDadosPacientes(char *maisProcurados, agFaixaEtaria *atualizacao,esp *ve
     }
     fprintf(arqDadosClinica, "Dados da Clinica:\n\n");
 
-    fprintf(arqDadosClinica, "Médico mais popular:\n");
-    fprintf(arqDadosClinica, "%s\n", maisProcurados);
+    fprintf(arqDadosClinica, "Médico(s) mais popular(es):\n");
+    medicoPopular(medico,arqDadosClinica,nMedicos);
 
-    especialidadesPopulares(vetorEsp,medico,nMedicos,&numEsp);
     fprintf(arqDadosClinica, "Ranking   da   procura   por   especialidades   médicas:\n\n");
-    //printf("numEsp == %d\n",numEsp);
+    especialidadesPopulares(vetorEsp,medico,nMedicos,&numEsp);
     for(numEsp=numEsp-1; numEsp>=0; numEsp-- ){
-      //printf("%s" ,vetorEsp[numEsp].especialidade);
-      fprintf(arqDadosClinica,"%s\n" ,vetorEsp[numEsp].especialidade);
+      fprintf(arqDadosClinica,"%s" ,vetorEsp[numEsp].especialidade);
       for(int p=0; p<4;p++){
         fprintf(arqDadosClinica,"Semana %d: %d\n",p+1,vetorEsp[numEsp].nConsultas[p]);
       }
@@ -54,15 +52,24 @@ void criaDadosPacientes(char *maisProcurados, agFaixaEtaria *atualizacao,esp *ve
 }
 
 
-void medicoPopular(char *maisProcurados, agMedico *medico, int *maisConsultas){
+void medicoPopular(agMedico *medico, FILE *arqDadosClinica, int nMedicos){
+  int maisProcurado=0;
 
-    if(*maisConsultas == medico->consultas){
-        strcat(maisProcurados, medico->nome);
+  for(int i=0; i<nMedicos; i++){
+    if(medico[i].consultas>maisProcurado){
+      maisProcurado=medico[i].consultas;
     }
-    else if (*maisConsultas < medico->consultas){
-        strcpy(maisProcurados, medico->nome);
-        *maisConsultas = medico->consultas;
+  }
+
+  for(int v=0; v<nMedicos; v++){
+    if(medico[v].consultas==maisProcurado){
+      fprintf(arqDadosClinica,"%s",medico[v].nome);
     }
+  }
+
+  fprintf(arqDadosClinica,"\n");
+
+    
 
 }
 

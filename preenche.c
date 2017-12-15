@@ -289,9 +289,7 @@ void exebeMatriz(agMedico *medico){
 
 void teste(){
     esp vetorEsp[dim];
-    //test
-    char maisProcurados[100];
-    int maisConsultas;
+    
     
 
   agMedico medico[dim];
@@ -340,24 +338,15 @@ void teste(){
 
 
         marcaHorario(arqLista, &medico[i], &atualizacao, pacientes, semana);
-        //printf("%d\n", medico[i].nConsultasSemana[semana]);
-        medicoPopular(maisProcurados, &medico[i], &maisConsultas);
-
-      
-      //  exebeMatriz(&medico[i]);
-      //  printf("\n");
+        
         escreveArqMedico(&medico[i] ,semana);
-
-        //printf("%s %d\n",medico[i].especialidade, medico[i].consultas);
-
 
     }
 
 
   }
-  //especialidadesPopulares(vetorEsp, medico,nMedicos);
 
-  criaDadosPacientes(maisProcurados, &atualizacao, vetorEsp, medico, nMedicos);
+  criaDadosPacientes(&atualizacao, vetorEsp, medico, nMedicos);
 }
 
 /*Função que preenche o vetor de medicos */
