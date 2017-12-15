@@ -6,8 +6,16 @@ Ana Carolina Maia
 
 Ranking   da   procura   por   especialidades   médicas:
 gastro
+Semana 1: 1
+Semana 2: 2
+Semana 3: 1
+Semana 4: 3
 clinico geral
- 
+Semana 1: 2
+Semana 2: 1
+Semana 3: 1
+Semana 4: 1
+
 Especialidade   mais   procurada   por   faixa   etária:
   0 -  25  gastro
  26 -  50  gastro

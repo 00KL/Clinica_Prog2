@@ -12,7 +12,7 @@ typedef struct {
     int id;
 
     char especialidade[dim];
-    int contEspecialidade;
+    int nConsultasSemana[4];
 
     int agenda[h][d];
     int consultas;
@@ -27,12 +27,33 @@ typedef struct {
     char medico[dim];
 } cliente;
 
-//Faixa etária
+/*//Faixa etária
 typedef struct {
     char faixa[dim][dim];
     int contFaixa;
 
+} agFaixaEtaria;*/
+
+//Faixa etária
+typedef struct {
+    char faixaUm[dim][dim];
+    int contFaixaUm;
+
+    char faixaDois[dim][dim];
+    int contFaixaDois;
+
+    char faixaTres[dim][dim];
+    int contFaixaTres;
+
+    char faixaQuatro[dim][dim];
+    int contFaixaQuatro;
 } agFaixaEtaria;
+
+typedef struct{
+  char especialidade[dim];
+  int nEspecialidade;
+  int nConsultas[4];
+} esp;
 
 //N será necessário exibir para o usuário
 //uma string, porem para nos será importante
@@ -55,7 +76,7 @@ int compStr(char *str, char *str1){
 
     /*o for irá percorrer as duas strings ate até q a primeira
     acabe, também poderia ser ate a segunda acabar.*/
-    for(i = 0; str[i] != '\0'; i++){
+    for(i = 0; str[i] != '\n' && str1[i] != '\n'; i++){
         /*ira comprar posição a posição da matriz*/
         if(str[i] == str1[i]){
             cont ++;

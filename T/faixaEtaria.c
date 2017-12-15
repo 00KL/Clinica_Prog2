@@ -36,7 +36,6 @@ void pesquisaDeFaixaEtaria(int idades, char *especialidade, agFaixaEtaria *atual
     else if( idade < 51){
         strcpy(atualizacao->faixaDois[atualizacao->contFaixaDois], especialidade);
         atualizacao->contFaixaDois+=1;
-        //printf("%d -> %s\n", atualizacao->contFaixaDois, atualizacao->faixaDois[atualizacao->contFaixaDois-1]);
     }
     else if(idade < 76){
         strcpy(atualizacao->faixaTres[atualizacao->contFaixaTres], especialidade);
@@ -58,60 +57,43 @@ void exibeTodasAsFaixas(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
     exibeFaixaQuatro(pesquisa, arqDadosClinica);
 }
 void exibeFaixaUm(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
-    int cont1 = 1, cont2 = 1;
+    int cont1 = 0, cont2 = 0;
     char vencedor[99] = "Não há consultas para essa faixa etaria\n";
-
-    //printf("%d\n", pesquisa->contFaixaUm);
     for(int i = 0; i < pesquisa->contFaixaUm; i++){
-        
-        if(pesquisa->faixaUm[i][0] !=  ' '){
-            
+
+        if(!compStr(pesquisa->faixaUm[i], " ")){
             for(int j = i + 1; j < pesquisa->contFaixaUm; j++){
                 if( compStr(pesquisa->faixaUm[i], pesquisa->faixaUm[j]) ) {
-
                     cont1++;
                     strcpy(pesquisa->faixaUm[j], " ");
                 }
             }
-            
             if(cont1 > cont2){
                 cont2 = cont1;
-                
                 strcpy(vencedor, pesquisa->faixaUm[i]);
-                
             }
-            cont1 = 1;
-
         }
-
     }
 
     fprintf(arqDadosClinica,"  0 -  25  %s", vencedor);
-    
 
 }
 void exibeFaixaDois(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
-    int cont1 = 1, cont2 = 1;
+    int cont1 = 0, cont2 = 0;
     char vencedor[99] = "Não há consultas para essa faixa etaria\n";
     for(int i = 0; i < pesquisa->contFaixaDois; i++){
 
-        if( pesquisa->faixaDois[i][0] !=  ' '){
-            ///printf("%d\n", pesquisa->contFaixaDois);
+        if(!compStr(pesquisa->faixaDois[i], " ")){
             for(int j = i + 1; j < pesquisa->contFaixaDois; j++){
                 if( compStr(pesquisa->faixaDois[i], pesquisa->faixaDois[j]) ) {
                     cont1++;
-
-                    //printf("%d -> %s", cont1, pesquisa->faixaDois[i]);
                     strcpy(pesquisa->faixaDois[j], " ");
                 }
             }
             if(cont1 > cont2){
-                    //printf("%d -> %s", cont1, pesquisa->faixaDois[i]);
                 cont2 = cont1;
                 strcpy(vencedor, pesquisa->faixaDois[i]);
-                
             }
-            cont1 = 1;
         }
     }
 
@@ -119,11 +101,11 @@ void exibeFaixaDois(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
 
 }
 void exibeFaixaTres(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
-    int cont1 = 1, cont2 = 1;
+    int cont1 = 0, cont2 = 0;
     char vencedor[99] = "Não há consultas para essa faixa etaria\n";
     for(int i = 0; i < pesquisa->contFaixaTres; i++){
 
-        if( pesquisa->faixaTres[i][0] !=  ' ' ){
+        if(!compStr(pesquisa->faixaTres[i], " ")){
             for(int j = i + 1; j < pesquisa->contFaixaTres; j++){
                 if( compStr(pesquisa->faixaTres[i], pesquisa->faixaTres[j]) ) {
                     cont1++;
@@ -134,7 +116,6 @@ void exibeFaixaTres(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
                 cont2 = cont1;
                 strcpy(vencedor, pesquisa->faixaTres[i]);
             }
-            cont1 = 1;
         }
     }
 
@@ -142,11 +123,11 @@ void exibeFaixaTres(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
 
 }
 void exibeFaixaQuatro(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
-    int cont1 = 1, cont2 = 1;
+    int cont1 = 0, cont2 = 0;
     char vencedor[99] = "Não há consultas para essa faixa etaria\n";
     for(int i = 0; i < pesquisa->contFaixaQuatro; i++){
 
-        if(pesquisa->faixaQuatro[i][0] !=  ' '){
+        if(!compStr(pesquisa->faixaQuatro[i], " ")){
             for(int j = i + 1; j < pesquisa->contFaixaQuatro; j++){
                 if( compStr(pesquisa->faixaQuatro[i], pesquisa->faixaQuatro[j]) ) {
                     cont1++;
@@ -157,8 +138,6 @@ void exibeFaixaQuatro(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
                 cont2 = cont1;
                 strcpy(vencedor, pesquisa->faixaQuatro[i]);
             }
-
-            cont1 = 1;
         }
     }
 
