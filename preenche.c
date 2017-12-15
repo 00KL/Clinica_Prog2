@@ -34,7 +34,7 @@ void nomeLista(char *, int, char *nTeste);
 
 void diasOcupados(agMedico *, FILE *);
 
-void preencheMatriz(agMedico * /*agMedico **/);
+void preencheMatriz(agMedico *);
 
 void marcaHorario(FILE *, agMedico *, agFaixaEtaria *, cliente *, int);
 void obterPaciente(FILE *, cliente *);
@@ -49,17 +49,17 @@ void escreveDadosMedico(FILE *arqSaida, agMedico *medico){
   se inicie na linha seguinte
   isso é necessário aqui pois o "fscanf" n pula uma linha
   ao final da leitura como o "fgets"*/
-  //fscanf(arqEntrada, "%d\n", &medico->id);
+
 
   /*escreve o id do medico no arquivo de saida*/
   fprintf(arqSaida, "%d\n", medico->id);
 
   /*lê a especialidade do medico no arquivo de entrada*/
-  //fgets(medico->especialidade, dim, arqEntrada);
+
   /*escreve a especialidade do medico no arquivo de saida*/
   fprintf(arqSaida, "%s", medico->especialidade);
 
-  //medico->consultas = 0;
+
 }
 
 
@@ -78,12 +78,12 @@ void preencheMatriz(agMedico *medico){
 
               /*hora de almoço de todos os medicos*/
             if(ho == 4){
-                //copia->agenda[ho][di] = -1;
+
                 medico->agenda[ho][di] = -1;
             }else{
                 /*hora disponivel genérico de todos os medicos*/
                 medico->agenda[ho][di] = 0;
-                //copia->agenda[ho][di] = 0;
+
             }
         }
     }
@@ -178,8 +178,6 @@ void marcaHorario(FILE *arqLista, agMedico *medico, agFaixaEtaria *atualizacao, 
     id será o id do paciente extraido do arqLista para a
     matriz da semana do medico em questão desse loop
     */
-    /*char nomeMedico[dim], lixo[dim];
-    int id, idade;*/
 
     /*geração de seed aleatoria para o rand baseada
     no tempo de execução do codigo*/
@@ -195,21 +193,13 @@ void marcaHorario(FILE *arqLista, agMedico *medico, agFaixaEtaria *atualizacao, 
    */
     for(int i=0; pacientes[i].id != 0; i++){
 
-      /*printf("%d %s\n",pacientes[i].id,pacientes[i].nome);
-      printf("%s %s\n",pacientes[i].medico,medico->nome);
-      printf("\n" );*/
-
         /*essa função irá percorrer o arquivo listaPc*/
-        //obterPaciente(arqLista, paciente);
 
         if(compStr(medico->nome,pacientes[i].medico)){
             medico->consultas+=1;
             medico->nConsultasSemana[semana-1]+=1;
-            //printf("%d -> %s\n",medico->nConsultasSemana[semana],medico[i].especialidade);
-          //printf("%s %d\n", pacientes[i].nome, pacientes[i].id);
+
             pesquisaDeFaixaEtaria( pacientes[i].idade.idade, medico->especialidade, atualizacao);
-
-
 
             aleatorio(medico, &pacientes[i]);
 
@@ -218,18 +208,17 @@ void marcaHorario(FILE *arqLista, agMedico *medico, agFaixaEtaria *atualizacao, 
     }
 
 }
+//função que preenche o vetor de pacientes
 void obterPaciente(FILE *arqLista, cliente *paciente){
   char saltarLinha[dim];
 
     fgets(paciente->nome, 30, arqLista);
-    //printf("oi%soi\n",paciente->nome);
-    //fim nome paciente tem \n
     fscanf( arqLista ,"%d\n", &paciente->id);
     fgets(paciente->fone, 30, arqLista);
     fscanf(arqLista, "%d %d %d\n", &paciente->idade.dia, &paciente->idade.mes,&paciente->idade.ano);
     fgets(paciente->medico, dim, arqLista);
     fgets(saltarLinha, 30, arqLista);
-    //printf("%d\n",paciente->id);
+
 }
 void aleatorio(agMedico *medico, cliente *paciente){
 /*A função "copiaMatriz" simplesmente transforma a matriz que foi preenchida em "marcaHorario" na matriz
@@ -248,14 +237,13 @@ no proximo loop, que dará origem a matriz de horarios da proxima semana.*/
             if(medico->agenda[hora][dia] == 0 ){
 
                 medico->agenda[hora][dia] = paciente->id;
-              //  printf("%d\n",paciente->id );
+
             }
         }
     }else if(medico->agenda[hora][dia] == 0){
         medico->agenda[hora][dia] = paciente->id;
-        //printf("%d\n",paciente->id );
-    }
 
+    }
 
 }
 
@@ -339,7 +327,6 @@ void vetorMedico(FILE *arqEntrada, agMedico *medico, int *nMedicos){
 
   for(contador=0; ! feof(arqEntrada) ; contador++){
     fgets(medico[contador].nome, dim, arqEntrada);
-    //printf("oi%soi\n",medico[contador].nome);
 
     fscanf(arqEntrada,"%d\n", &medico[contador].id);
 
@@ -401,11 +388,6 @@ void escreveArqMedico(agMedico *medico, int semana){
 
     arqSaida = fopen(nomeArq, "a+");
 
-
-    /*if(compStr("Joao Silva da Costa",medico->nome)){
-      exebeMatriz(medico);
-      printf("\n");
-    }*/
     escreveMatriz(medico,arqSaida,semana);
 
   }
