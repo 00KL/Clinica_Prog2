@@ -16,21 +16,27 @@ typedef struct {
     int consultas;
 } agMedico;
 
+typedef struct {
+  int dia;
+  int mes;
+  int ano;
+  int idade;
+} data;
+
 //Cliente
 typedef struct {
     char nome[dim];
     int id;
     char fone[dim];
-    int idade;
+    data idade;
     char medico[dim];
 } cliente;
 
-/*//Faixa etária
+//Faixa etária
 typedef struct {
-    char faixa[dim][dim];
-    int contFaixa;
-
-} agFaixaEtaria;*/
+    int faixa[4][4];
+    char especialidade[dim];
+} agFaixaEtariaVet;
 
 //Faixa etária
 typedef struct {
@@ -45,7 +51,7 @@ typedef struct {
 
     char faixaQuatro[dim][dim];
     int contFaixaQuatro;
-} agFaixaEtaria;
+  } agFaixaEtaria;
 
 typedef struct{
   char especialidade[dim];

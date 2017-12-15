@@ -22,10 +22,9 @@ void iniciaFaixaEtaria(agFaixaEtaria *resultado){
 }
 
 /**/
-void pesquisaDeFaixaEtaria(int idades, char *especialidade, agFaixaEtaria *atualizacao){
+void pesquisaDeFaixaEtaria(int idade, char *especialidade, agFaixaEtaria *atualizacao){
 
-    int idade = 2017;
-    idade -= idades;
+
     char lixo;
 
     if( idade < 26){
@@ -63,9 +62,9 @@ void exibeFaixaUm(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
 
     //printf("%d\n", pesquisa->contFaixaUm);
     for(int i = 0; i < pesquisa->contFaixaUm; i++){
-        
+
         if(pesquisa->faixaUm[i][0] !=  ' '){
-            
+
             for(int j = i + 1; j < pesquisa->contFaixaUm; j++){
                 if( compStr(pesquisa->faixaUm[i], pesquisa->faixaUm[j]) ) {
 
@@ -73,12 +72,12 @@ void exibeFaixaUm(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
                     strcpy(pesquisa->faixaUm[j], " ");
                 }
             }
-            
+
             if(cont1 > cont2){
                 cont2 = cont1;
-                
+
                 strcpy(vencedor, pesquisa->faixaUm[i]);
-                
+
             }
             cont1 = 1;
 
@@ -87,7 +86,7 @@ void exibeFaixaUm(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
     }
 
     fprintf(arqDadosClinica,"  0 -  25  %s", vencedor);
-    
+
 
 }
 void exibeFaixaDois(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
@@ -109,7 +108,7 @@ void exibeFaixaDois(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
                     //printf("%d -> %s", cont1, pesquisa->faixaDois[i]);
                 cont2 = cont1;
                 strcpy(vencedor, pesquisa->faixaDois[i]);
-                
+
             }
             cont1 = 1;
         }

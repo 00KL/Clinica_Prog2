@@ -21,7 +21,7 @@ void bubble(esp *, int );
 void consultasEspSemana(esp *, agMedico *, int , int );
 
 
-
+//A função abaixo obtem e printa no arquivo dadosClinica.txt as informações requisitadas
 void criaDadosPacientes(agFaixaEtaria *atualizacao,esp *vetorEsp, agMedico *medico, int nMedicos){
     FILE *arqDadosClinica;
 
@@ -43,7 +43,8 @@ void criaDadosPacientes(agFaixaEtaria *atualizacao,esp *vetorEsp, agMedico *medi
 
 }
 
-
+/*a funçao abaixo indica qual o medico mais popular verificando qual o maior numero de consultas total entre todos os medicos
+e depois printando no arquivo todos os nomes de medico que possuem tal valor de consultas */
 void medicoPopular(agMedico *medico, FILE *arqDadosClinica, int nMedicos){
   int maisProcurado=0;
 
@@ -65,12 +66,17 @@ void medicoPopular(agMedico *medico, FILE *arqDadosClinica, int nMedicos){
 
 }
 
-
+/*a função abaixo preenche o vetor de especialidades de maneira que verifica sempre se ja existe o mesmo nome de especialidade na posiçao do vetor e em caso de confirmaçao
+só adiciona o numero de consultas do medico daquela especialidade ao numero de consultas total da especialidade, caso verifique que os nomes nao sao iguais
+ele passa a verificar se o vetor de especialidade na posiçao requisitada nao esta preenchido e caso nao esteja ele adiciona o nome da especialidade e numero de consultasEspSemana
+naquela posição do vetor */
 void especialidadesPopulares(esp *vetorEsp, agMedico *medico, int nMedicos, FILE *arqDadosClinica){
 
   char vazio[dim] = {' '};
+  //numEsp é o numero de especialidades no vetor
   int c,numEsp=0;
-
+  //o uso do break abaixo é motivado pela falta de necessidade de continuar a percorrer o vetor de especialidades após o preenchimento da especialidade na posiçao
+  // em que o if é verdadeiro
   for(int k=0; k<nMedicos; k++){
 
 
@@ -79,12 +85,10 @@ void especialidadesPopulares(esp *vetorEsp, agMedico *medico, int nMedicos, FILE
 
       if(compStr(vetorEsp[i].especialidade,medico[k].especialidade)){
         vetorEsp[i].nEspecialidade+=medico[k].consultas;
-        //printf("%d TESTE 1\n", medico[k].consultas);
         break;
       }else if(vetorEsp[i].especialidade[0]==vazio[0]){
             strcpy(vetorEsp[i].especialidade,medico[k].especialidade);
             vetorEsp[i].nEspecialidade=medico[k].consultas;
-            //printf("%d TESTE 2\n", medico[k].consultas);
             numEsp+=1;
             break;
           }
@@ -92,9 +96,12 @@ void especialidadesPopulares(esp *vetorEsp, agMedico *medico, int nMedicos, FILE
     }
   }
 
+  //bubbleSort utilizado para organizar o vetor de acordo a maior procura de uma determinada especialidade
   bubble(vetorEsp,numEsp);
+  //depois de organizado o vetor recebe as consultas semanais de cada especialidade
   consultasEspSemana(vetorEsp,medico,nMedicos,numEsp);
 
+  //Agora os dados do vetor são escritos no arquivo
   for(numEsp=numEsp-1; numEsp>=0; numEsp-- ){
       fprintf(arqDadosClinica,"%s" ,vetorEsp[numEsp].especialidade);
       for(int p=0; p<4;p++){
@@ -104,6 +111,7 @@ void especialidadesPopulares(esp *vetorEsp, agMedico *medico, int nMedicos, FILE
     }
 }
 
+//Funçao que inicializa o vetor de especialidades
 void iniciaVetor(esp *vetorEsp){
   for(int i=0; i<dim; i++){
     strcpy(vetorEsp[i].especialidade," ");
@@ -114,6 +122,7 @@ void iniciaVetor(esp *vetorEsp){
   }
 }
 
+//bubbleSort
 void bubble(esp *vetorEsp, int numEsp){
   int troca;
   char trocaC[dim];
@@ -132,6 +141,7 @@ void bubble(esp *vetorEsp, int numEsp){
   }
 }
 
+//Função que preenche o vetor de especialidades com o número de consultas semanais
 void consultasEspSemana(esp *vetorEsp, agMedico *medico, int nMedicos, int numEsp){
   for(int i=0; i<nMedicos; i++){
 

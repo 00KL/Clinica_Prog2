@@ -14,9 +14,11 @@
 //que os structs sejam acessiveis para colocar.c e
 //criaDadosPacientes.c
 #include "structs.c"
+#include "idade.c"
 #include "semanas.c"
 #include "colocar.c"
 #include "criaDadosPacientes.c"
+
 
 void teste(char *);
 
@@ -37,9 +39,6 @@ void preencheMatriz(agMedico * /*agMedico **/);
 void marcaHorario(FILE *, agMedico *, agFaixaEtaria *, cliente *, int);
 void obterPaciente(FILE *, cliente *);
 void aleatorio(agMedico *, cliente *);
-
-//SO PARA TESTES
-void exebeMatriz(agMedico *);
 
 void escreveDadosMedico(FILE *arqSaida, agMedico *medico){
   /*escreve o nome do medico no arquivo de saida*/
@@ -150,27 +149,20 @@ void diasOcupados(agMedico *medico, FILE *arqMedico){
 
 
 }
+//Função responsavel por gerar a string como o nome da lista semanal de pacientes
 void nomeLista(char *nomeArq, int semana, char *nTeste){
 
   char fimNome[5],nome[dim],numero[1],teste[5];
-  //numero[0]=nTeste[0];
 
-  //printf("%s TORTONA\n",nTeste);
   strcpy(fimNome, " .txt");
   fimNome[0] = semana + 48;
-  //printf("%s TORTONA\n",fimNome);
   strcpy(teste,fimNome);
-  //printf("%s TOR\n",fimNome);
-
   strcat(numero,nTeste);
   strcpy(nome,"entrada/Teste");
   strcat(nome,numero);
   strcat(nome,"/listaPacientesSemana");
   strcat(nome,teste);
   strcpy(nomeArq,nome);
-
-  printf("%s TOR\n",fimNome);
-  //printf("%s TOR\n",teste);
 
 }
 
@@ -215,7 +207,7 @@ void marcaHorario(FILE *arqLista, agMedico *medico, agFaixaEtaria *atualizacao, 
             medico->nConsultasSemana[semana-1]+=1;
             //printf("%d -> %s\n",medico->nConsultasSemana[semana],medico[i].especialidade);
           //printf("%s %d\n", pacientes[i].nome, pacientes[i].id);
-            pesquisaDeFaixaEtaria( pacientes[i].idade, medico->especialidade, atualizacao);
+            pesquisaDeFaixaEtaria( pacientes[i].idade.idade, medico->especialidade, atualizacao);
 
 
 
@@ -224,7 +216,6 @@ void marcaHorario(FILE *arqLista, agMedico *medico, agFaixaEtaria *atualizacao, 
         }
 
     }
-    //exebeMatriz(medico);
 
 }
 void obterPaciente(FILE *arqLista, cliente *paciente){
@@ -235,7 +226,7 @@ void obterPaciente(FILE *arqLista, cliente *paciente){
     //fim nome paciente tem \n
     fscanf( arqLista ,"%d\n", &paciente->id);
     fgets(paciente->fone, 30, arqLista);
-    fscanf(arqLista, "%d %d %d\n", &paciente->idade, &paciente->idade,&paciente->idade);
+    fscanf(arqLista, "%d %d %d\n", &paciente->idade.dia, &paciente->idade.mes,&paciente->idade.ano);
     fgets(paciente->medico, dim, arqLista);
     fgets(saltarLinha, 30, arqLista);
     //printf("%d\n",paciente->id);
@@ -269,70 +260,43 @@ no proximo loop, que dará origem a matriz de horarios da proxima semana.*/
 }
 
 
-//SOMENTE PARA TESTE
-void exebeMatriz(agMedico *medico){
-
-    for(int ho = 0; ho < h; ho++){
-        for(int di = 0; di < d; di++){
-            if(medico->agenda[ho][di] == 0){
-
-                printf(" %d  ", medico->agenda[ho][di]);
-
-            }else if(medico->agenda[ho][di] == -1){
-
-                printf("%d  ", medico->agenda[ho][di]);
-
-            }else{
-
-                printf("%d ", medico->agenda[ho][di]);
-            }
-
-
-        }
-        printf("\n");
-    }
-}
-
-
 void teste(char *nTeste){
-    esp vetorEsp[dim];
 
+  //Test
 
-
+  agFaixaEtariaVet vetorEspFaixa[dim];
+  esp vetorEsp[dim];
   agMedico medico[dim];
   cliente pacientes[99];
-  FILE *arqEntrada, *arqLista;
-  char nomeArq[dim];
   agFaixaEtaria atualizacao;
+  char nomeArq[dim],entrada[dim],numero[1];
   int nMedicos;
-  char entrada[dim],numero[1];
+  FILE *arqEntrada, *arqLista;
 
+
+
+  //Inicia o vetor de especialidades zerado para evitar acumulo de lixo
   iniciaVetor(vetorEsp);
 
   strcpy(numero,nTeste);
-  //printf("%s\n",nTeste);
   strcpy(entrada, "entrada/Teste");
   strcat(entrada,numero);
-  //printf("%s\n",entrada);
   strcat(entrada,"/dadosMedicos.txt");
-  //printf("%s\n",entrada);
-
 
   if (!(arqEntrada = fopen (entrada, "r"))){
       printf("ERRO1\n");
       exit(1);
   }
 
+  //Preenche o vetor de medicos
   vetorMedico(arqEntrada,medico,&nMedicos);
-
-  //printf("%d\n",nMedicos);
-
-
 
   fclose(arqEntrada);
 
   for(int semana = 4; semana > 0; semana--){
 
+
+    //Reset semanal do vetor de pacientes
     resetVetorPacientes(pacientes);
 
       /*cria nome devido para o arquivo do loop em questão*/
@@ -343,26 +307,30 @@ void teste(char *nTeste){
       exit(1);
     }
 
+    //Preenchimento semanal do vetor de pacientes
     for(int k=0; ! feof(arqLista); k++){
       obterPaciente(arqLista,&pacientes[k]);
-      //printf("%s %d\n",pacientes[k].nome, pacientes[k].id);
-      //printf("\n" );
     }
+
     fclose(arqLista);
+
+    calcIdade(pacientes);
+
+    //preencheESP(vetorEspFaixa, pacientes, semana);
 
     for(int i=0; i < nMedicos ; i++){
 
-
+        //Função que marca os horarios semanais nas agendas dos medicos
         marcaHorario(arqLista, &medico[i], &atualizacao, pacientes, semana);
-
+        //Função que escreve a matriz de semanas nos arquivos de cada medico
         escreveArqMedico(&medico[i] ,semana);
 
     }
 
-
   }
-
+  //Funçao que cria os dados e coloca no arquivo dadosClinica.txt
   criaDadosPacientes(&atualizacao, vetorEsp, medico, nMedicos);
+  printf("Apos a execução do teste caso queira executar outro apague os arquivos da pasta Saida para evitar acumulo de arquivos desnecessarios\n");
 }
 
 /*Função que preenche o vetor de medicos */
@@ -415,7 +383,7 @@ void escreveArqMedico(agMedico *medico, int semana){
     do arquivo.
     */
 
-    if(semana==1){
+    if(semana==4){
 
       arqSaida = fopen(nomeArq, "w'");
 
@@ -453,7 +421,9 @@ void resetVetorPacientes(cliente *pacientes){
     strcpy(pacientes[i].nome, " ");
     pacientes[i].id=0;
     strcpy(pacientes[i].fone, " ");
-    pacientes[i].idade=0;
+    pacientes[i].idade.ano=0;
+    pacientes[i].idade.mes=0;
+    pacientes[i].idade.dia=0;
     strcpy(pacientes[i].medico, " ");
   }
 }
