@@ -1,26 +1,37 @@
 Dados da Clinica:
 
 Médico(s) mais popular(es):
-Joao Silva da Costa
-Ana Carolina Maia
+Douglas Azevedo Ferreira
 
 Ranking   da   procura   por   especialidades   médicas:
-
-gastro
-Semana 1: 1
-Semana 2: 2
-Semana 3: 1
-Semana 4: 3
 
 clinico geral
 Semana 1: 2
 Semana 2: 1
+Semana 3: 5
+Semana 4: 2
+
+urologista
+Semana 1: 3
+Semana 2: 2
+Semana 3: 3
+Semana 4: 1
+
+ginecologista
+Semana 1: 3
+Semana 2: 3
 Semana 3: 1
+Semana 4: 1
+
+gastro
+Semana 1: 1
+Semana 2: 0
+Semana 3: 2
 Semana 4: 1
 
 
 Especialidade   mais   procurada   por   faixa   etária:
-  0 -  25  gastro
- 26 -  50  gastro
- 51 -  75  clinico geral
- 76 - 100  clinico geral
+  0 -  25  clinico geral
+ 26 -  50  clinico geral
+ 51 -  75  gastro
+ 76 - 100  urologista

@@ -24,7 +24,7 @@ void consultasEspSemana(esp *, agMedico *, int , int );
 
 void criaDadosPacientes(agFaixaEtaria *atualizacao,esp *vetorEsp, agMedico *medico, int nMedicos){
     FILE *arqDadosClinica;
-    
+
 
     if (!(arqDadosClinica = fopen ("saida/dadosClinica.txt", "w"))){
         printf("ERRO \n");
@@ -61,7 +61,7 @@ void medicoPopular(agMedico *medico, FILE *arqDadosClinica, int nMedicos){
 
   fprintf(arqDadosClinica,"\n");
 
-    
+
 
 }
 
@@ -70,9 +70,9 @@ void especialidadesPopulares(esp *vetorEsp, agMedico *medico, int nMedicos, FILE
 
   char vazio[dim] = {' '};
   int c,numEsp=0;
-  
+
   for(int k=0; k<nMedicos; k++){
-   
+
 
     for(int i=0; i<dim; i++){
 
@@ -100,7 +100,7 @@ void especialidadesPopulares(esp *vetorEsp, agMedico *medico, int nMedicos, FILE
       for(int p=0; p<4;p++){
         fprintf(arqDadosClinica,"Semana %d: %d\n",p+1,vetorEsp[numEsp].nConsultas[p]);
       }
-      fprintf(arqDadosClinica,"\n"); 
+      fprintf(arqDadosClinica,"\n");
     }
 }
 
@@ -138,7 +138,7 @@ void consultasEspSemana(esp *vetorEsp, agMedico *medico, int nMedicos, int numEs
     for(int k=0; k<numEsp; k++){
 
       if(compStr(vetorEsp[k].especialidade,medico[i].especialidade)){
-        
+
         for(int b=0;b<4;b++){
           vetorEsp[k].nConsultas[b]+=medico[i].nConsultasSemana[b];
         }
