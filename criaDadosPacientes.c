@@ -36,14 +36,15 @@ void criaDadosPacientes(char *maisProcurados, agFaixaEtaria *atualizacao,esp *ve
     fprintf(arqDadosClinica, "%s\n", maisProcurados);
 
     especialidadesPopulares(vetorEsp,medico,nMedicos,&numEsp);
-    fprintf(arqDadosClinica, "Ranking   da   procura   por   especialidades   médicas:\n");
+    fprintf(arqDadosClinica, "Ranking   da   procura   por   especialidades   médicas:\n\n");
     //printf("numEsp == %d\n",numEsp);
     for(numEsp=numEsp-1; numEsp>=0; numEsp-- ){
       //printf("%s" ,vetorEsp[numEsp].especialidade);
-      fprintf(arqDadosClinica,"%s" ,vetorEsp[numEsp].especialidade);
+      fprintf(arqDadosClinica,"%s\n" ,vetorEsp[numEsp].especialidade);
       for(int p=0; p<4;p++){
         fprintf(arqDadosClinica,"Semana %d: %d\n",p+1,vetorEsp[numEsp].nConsultas[p]);
       }
+      fprintf(arqDadosClinica,"\n");
       
     }
 
