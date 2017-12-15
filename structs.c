@@ -10,10 +10,8 @@ int compStr(char *, char *);
 typedef struct {
     char nome[dim];
     int id;
-
     char especialidade[dim];
     int nConsultasSemana[4];
-
     int agenda[h][d];
     int consultas;
 } agMedico;

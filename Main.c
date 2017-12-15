@@ -8,15 +8,12 @@
 
 int main(){
 
-    //Criação de structs
-    agMedico medico;
-    cliente paciente;
-    agFaixaEtaria resultado, atualizacao;
+    char nTeste[1];
 
-    //variaveis necessárias
-    FILE *arqSaida, *arqEntrada, *arqLista;
+    printf("Informe o numero do teste que sera executado:\n");
+    scanf("%c", nTeste);
 
-    teste();
+    teste(nTeste);
     //função q irá executar os objetivos no enunciado
     //preencheMedi(&medico, arqEntrada, arqLista, &resultado, &atualizacao, &paciente);
 

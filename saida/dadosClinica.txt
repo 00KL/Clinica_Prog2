@@ -1,20 +1,23 @@
 Dados da Clinica:
 
-Médico mais popular:
+Médico(s) mais popular(es):
 Joao Silva da Costa
 Ana Carolina Maia
 
 Ranking   da   procura   por   especialidades   médicas:
+
 gastro
 Semana 1: 1
 Semana 2: 2
 Semana 3: 1
 Semana 4: 3
+
 clinico geral
 Semana 1: 2
 Semana 2: 1
 Semana 3: 1
 Semana 4: 1
+
 
 Especialidade   mais   procurada   por   faixa   etária:
   0 -  25  gastro

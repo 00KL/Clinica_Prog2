@@ -18,7 +18,7 @@
 #include "colocar.c"
 #include "criaDadosPacientes.c"
 
-void teste();
+void teste(char *);
 
 void escreveArqMedico(agMedico *, int);
 
@@ -28,7 +28,7 @@ void vetorMedico(FILE *, agMedico *, int *);
 
 void escreveDadosMedico(FILE *, agMedico *);
 
-void nomeLista(char *, int);
+void nomeLista(char *, int, char *nTeste);
 
 void diasOcupados(agMedico *, FILE *);
 
@@ -150,20 +150,25 @@ void diasOcupados(agMedico *medico, FILE *arqMedico){
 
 
 }
-void nomeLista(char *nomeArq, int semana){
+void nomeLista(char *nomeArq, int semana, char *nTeste){
 
-  char fimNome[5];
+  char fimNome[5],nome[dim],numero[1];
+  //numero[0]=nTeste[0];
 
+  //printf("%s TORTONA\n",nTeste);
   strcpy(fimNome, " .txt");
   fimNome[0] = semana + 48;
+  //printf("%s TORTONA\n",fimNome);
 
-  /*copia do inicio de nome de cada arquivo para a atualização
-  do arquivo q deve ser lido*/
-  strcpy(nomeArq, "entrada/listaPacientesSemana");
-
-  /*concatenação do inicio do nome da parte que varia, ou seja o
-  numero da semana*/
-  strcat(nomeArq, fimNome);
+  strcat(numero,nTeste);
+  strcpy(nome,"entrada/Teste");
+  //printf("%s TOR\n",numero);
+  strcat(nome,numero);
+  //printf("%s TOR\n",nome);
+  strcat(nome,"/listaPacientesSemana");
+  strcat(nome,fimNome);
+  printf("%s TOR\n",nome);
+  
 
 }
 
@@ -287,7 +292,7 @@ void exebeMatriz(agMedico *medico){
 }
 
 
-void teste(){
+void teste(char *nTeste){
     esp vetorEsp[dim];
     
     
@@ -298,11 +303,20 @@ void teste(){
   char nomeArq[dim];
   agFaixaEtaria atualizacao;
   int nMedicos;
-  char vazio[1]={' '};
+  char entrada[dim],numero[1];
 
   iniciaVetor(vetorEsp);
 
-  if (!(arqEntrada = fopen ("entrada/dadosMedicos.txt", "r"))){
+  strcpy(numero,nTeste);
+  //printf("%s\n",nTeste);
+  strcpy(entrada, "entrada/Teste");
+  strcat(entrada,numero);
+  //printf("%s\n",entrada);
+  strcat(entrada,"/dadosMedicos.txt");
+  //printf("%s\n",entrada);
+
+
+  if (!(arqEntrada = fopen (entrada, "r"))){
       printf("ERRO1\n");
       exit(1);
   }
@@ -320,7 +334,7 @@ void teste(){
     resetVetorPacientes(pacientes);
 
       /*cria nome devido para o arquivo do loop em questão*/
-    nomeLista(nomeArq, semana);
+    nomeLista(nomeArq, semana, nTeste);
 
     if (!(arqLista = fopen(nomeArq, "r"))){
       printf("%s \nERRO3 \n", nomeArq);
