@@ -406,6 +406,7 @@ void resetVetorPacientes(cliente *pacientes){
     pacientes[i].idade.ano=0;
     pacientes[i].idade.mes=0;
     pacientes[i].idade.dia=0;
+    pacientes[i].idade.idade=0;
     strcpy(pacientes[i].medico, " ");
   }
 }
