@@ -11,14 +11,14 @@ int main(){
     //Criação de structs
     agMedico medico;
     cliente paciente;
-    agFaixaEtaria atualizacao[4];
+    agFaixaEtaria resultado, atualizacao;
 
     //variaveis necessárias
     FILE *arqSaida, *arqEntrada, *arqLista;
 
 
     //função q irá executar os objetivos no enunciado
-    preencheMedi(&medico, arqEntrada, arqLista, atualizacao, &paciente);
+    preencheMedi(&medico, arqEntrada, arqLista, &resultado, &atualizacao, &paciente);
 
     return 0;
 }

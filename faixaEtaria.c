@@ -58,7 +58,7 @@ void exibeTodasAsFaixas(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
 }
 void exibeFaixaUm(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
     int cont1 = 0, cont2 = 0;
-    char vencedor[dim] = " ";
+    char vencedor[99] = "Não há consultas para essa faixa etaria\n";
     for(int i = 0; i < pesquisa->contFaixaUm; i++){
 
         if(!compStr(pesquisa->faixaUm[i], " ")){
@@ -80,7 +80,7 @@ void exibeFaixaUm(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
 }
 void exibeFaixaDois(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
     int cont1 = 0, cont2 = 0;
-    char vencedor[dim] = " ";
+    char vencedor[99] = "Não há consultas para essa faixa etaria\n";
     for(int i = 0; i < pesquisa->contFaixaDois; i++){
 
         if(!compStr(pesquisa->faixaDois[i], " ")){
@@ -102,7 +102,7 @@ void exibeFaixaDois(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
 }
 void exibeFaixaTres(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
     int cont1 = 0, cont2 = 0;
-    char vencedor[dim] = " ";
+    char vencedor[99] = "Não há consultas para essa faixa etaria\n";
     for(int i = 0; i < pesquisa->contFaixaTres; i++){
 
         if(!compStr(pesquisa->faixaTres[i], " ")){
@@ -124,7 +124,7 @@ void exibeFaixaTres(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
 }
 void exibeFaixaQuatro(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
     int cont1 = 0, cont2 = 0;
-    char vencedor[dim] = " ";
+    char vencedor[99] = "Não há consultas para essa faixa etaria\n";
     for(int i = 0; i < pesquisa->contFaixaQuatro; i++){
 
         if(!compStr(pesquisa->faixaQuatro[i], " ")){

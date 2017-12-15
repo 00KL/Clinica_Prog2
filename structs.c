@@ -42,6 +42,12 @@ typedef struct {
     int contFaixaQuatro;
 } agFaixaEtaria;
 
+//TEST
+typedef struct{
+  char especialidade[dim];
+  int nEspecialidade;
+} esp;
+
 //N será necessário exibir para o usuário
 //uma string, porem para nos será importante
 //para testar os valores q estão sendo registrados

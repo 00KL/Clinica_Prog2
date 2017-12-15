@@ -16,9 +16,9 @@ int main(){
     //variaveis necessárias
     FILE *arqSaida, *arqEntrada, *arqLista;
 
-    teste();
+
     //função q irá executar os objetivos no enunciado
-    //preencheMedi(&medico, arqEntrada, arqLista, &resultado, &atualizacao, &paciente);
+    preencheMedi(&medico, arqEntrada, arqLista, &resultado, &atualizacao, &paciente);
 
     return 0;
 }

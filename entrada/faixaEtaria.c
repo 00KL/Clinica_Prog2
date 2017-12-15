@@ -1,21 +1,28 @@
 //Questão 5
 void iniciaFaixaEtaria(agFaixaEtaria *);
+void exibeFaixaUm(agFaixaEtaria *, FILE *);
+void exibeFaixaDois(agFaixaEtaria *, FILE *);
+void exibeFaixaTres(agFaixaEtaria *, FILE *);
+void exibeFaixaQuatro(agFaixaEtaria *, FILE *);
 void exibeTodasAsFaixas(agFaixaEtaria *, FILE *);
-void pesquisaDeFaixaEtaria(int , char *, agFaixaEtaria *);
+
 
 
 /*como o proprio nome sugere a função só inicia os valores daquelas posiçoes na struct com valor 0, para que
 nao haja erros causados por lixo de memoria*/
-void iniciaFaixaEtaria(agFaixaEtaria *faixaEtaria){
+void iniciaFaixaEtaria(agFaixaEtaria *resultado){
 
-    faixaEtaria[0].contFaixa = 0;
-    faixaEtaria[1].contFaixa = 0;
-    faixaEtaria[2].contFaixa = 0;
-    faixaEtaria[3].contFaixa = 0;
+    resultado->contFaixa[0] = 0;
+
+    resultado->contFaixa[1] = 0;
+
+    resultado->contFaixa[2] = 0;
+
+    resultado->contFaixa[3] = 0;
 }
 
 /**/
-void pesquisaDeFaixaEtaria(int idade, char *especialidade, agFaixaEtaria *faixaEtaria){
+void pesquisaDeFaixaEtaria(int idade, char *especialidade, agFaixaEtaria *atualizacao){
 
     /* idade refere-se ao ano de nascimento do pasciente.
     Considerando o ano atual 2017 e desconsederando os meses e dias,
@@ -26,26 +33,26 @@ void pesquisaDeFaixaEtaria(int idade, char *especialidade, agFaixaEtaria *faixaE
     /*Cada if representa uma das faixa etaria estabelecida no enunciado
     */
     if( idade < 26){
-        /* respresentam cada faixa etaria são inicializados aqui
+        /*os vetores de matrizes q respresentam cada faixa etaria são inicializados aqui
         assim sendo a posição atual esta vazia ou com lixo e deve ser sobreescrita
         com o valor q sera analizado por funçõe posteriores.*/
-        strcpy( ( faixaEtaria[0].faixa[ faixaEtaria[0].contFaixa ] ) , especialidade);
+        strcpy(atualizacao->faixa[0][atualizacao->contFaixa[0]], especialidade);
         /*o valor do contador é atualizado para q na proxima pesquisa seja
         a especialidade seja escrita na posição correta da matriz faixa*/
-        faixaEtaria[0].contFaixa+=1;
+        atualizacao->contFaixa[0]+=1;
 
     }
     else if( idade < 51){
-        strcpy( ( faixaEtaria[1].faixa[ faixaEtaria[1].contFaixa ] ) , especialidade);
-        faixaEtaria[1].contFaixa+=1;
+        strcpy(atualizacao->faixa[1][atualizacao->contFaixa[1]], especialidade);
+        atualizacao->contFaixa[1]+=1;
     }
     else if(idade < 76){
-        strcpy( ( faixaEtaria[2].faixa[ faixaEtaria[2].contFaixa ] ) , especialidade);
-        faixaEtaria[2].contFaixa+=1;
+        strcpy(atualizacao->faixa[2][atualizacao->contFaixa[2]], especialidade);
+        atualizacao->contFaixa[2]+=1;
     }
     else if(idade < 101){
-        strcpy( ( faixaEtaria[3].faixa[ faixaEtaria[3].contFaixa ] ) , especialidade);
-        faixaEtaria[3].contFaixa+=1;
+        strcpy(atualizacao->faixa[3][atualizacao->contFaixa[3]], especialidade);
+        atualizacao->contFaixa[3]+=1;
 
     }
 
@@ -54,59 +61,29 @@ void pesquisaDeFaixaEtaria(int idade, char *especialidade, agFaixaEtaria *faixaE
 
 
 void exibeTodasAsFaixas(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
-    /*os cont são para checar */
     int cont1 = 0, cont2 = 0;
-
-    /*ira armezar o vencedor referente a casa loop/faixa etaria*/
     char vencedor[dim] = " ";
 
-    //Ira percorrer as faixas
-    for(int faixaEtaria = 0; faixaEtaria < 4; faixaEtaria++){
+    for(int j = 0; j < 4; j++){
 
-        //ira percorer as especialidades da faixa em questão
-        for(int especialidade = 0; especialidade < pesquisa[faixaEtaria].contFaixa; especialidade++){
 
-            //ira checar se a posição do vetor faixa na posição especialidade
-            //esta com um espaço, o q significa q ele ja foi lido, nesse caso
-            //n é necessário checar essa posição
-            if(!compStr(pesquisa[faixaEtaria].faixa[especialidade], " ")){
+        for(int i = 0; i < pesquisa->contFaixa[j]; i++){
 
-                //o for começa a contar da posição uma casa a frente
-                //da posição "ESPECIALIDADE", pois ela q sera comparada com o
-                //restante da matriz
-                //Caso a posição ESPECIALIDADE + 1 seja o fim do vetor o for
-                //n sera executado
-                for(int compara = especialidade + 1; compara < pesquisa[faixaEtaria].contFaixa; compara++){
-
-                    //Ira comparar a posição ESPECIALIDADE com todas as sequentes
-                    if( compStr(pesquisa[faixaEtaria].faixa[especialidade], pesquisa[faixaEtaria].faixa[compara]) ) {
-                        //ira contar as aparições da especialidade armazenada na
-                        //posição ESPECIALIDADE do vetor Faixa
+            if(!compStr(pesquisa->faixa[j][i], " ")){
+                for(int j = i + 1; j < pesquisa->contFaixa[j]; j++){
+                    if( compStr(pesquisa->faixa[j][i], pesquisa->faixa[j][i]) ) {
                         cont1++;
-                        //ira por espaço vazio em todos as posições q ja foram
-                        //checadas q contadas como repetições do
-                        strcpy(pesquisa[faixaEtaria].faixa[compara], " ");
+                          strcpy(pesquisa->faixa[j][i], " ");
                     }
-
                 }
-
-                //ira checar se o contador CONT1 é maior q o contador
-                //CONT2, com o objetivo de sobrescrever o cont2 para futuras
-                //comparações.
-                //CONT2 é iniciado como 0 para q qualquer quantidade seja maior
-                // e substitua cont2
                 if(cont1 > cont2){
                     cont2 = cont1;
-                    //VENCEDOR ira ser sobrescrito com o nome da especialidade
-                    //q tem mais requisições na faixaEtaria desse loop
-                    strcpy(vencedor, pesquisa[faixaEtaria].faixa[especialidade]);
+                    strcpy(vencedor, pesquisa->faixa[j][i]);
                 }
             }
         }
 
-        //Para cada faixaEtaria ira haver uma escrita diferente no arquivo
-        //dadosClientes, seguindo os parametros do enunciado
-        switch (faixaEtaria) {
+        switch (j) {
           case 0:
                   fprintf(arqDadosClinica,"  0 -  25  %s", vencedor);
                   break;
@@ -121,12 +98,81 @@ void exibeTodasAsFaixas(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
                   break;
         }
 
-        // ira zerar os dois contadores com o objetivo de novas comparações
         cont1 = 0;
         cont2 = 0;
-        //ira colocar espeço no vetor VENCEDOR apenas para limpalo.
         strcpy(vencedor, " ");
+
 
     }
 
+
 }
+
+/*
+void exibeFaixaDois(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
+    int cont1 = 0, cont2 = 0;
+    char vencedor[dim] = " ";
+    for(int i = 0; i < pesquisa->contFaixaDois; i++){
+
+        if(!compStr(pesquisa->faixaDois[i], " ")){
+            for(int j = i + 1; j < pesquisa->contFaixaDois; j++){
+                if( compStr(pesquisa->faixaDois[i], pesquisa->faixaDois[j]) ) {
+                    cont1++;
+                    strcpy(pesquisa->faixaDois[j], " ");
+                }
+            }
+            if(cont1 > cont2){
+                cont2 = cont1;
+                strcpy(vencedor, pesquisa->faixaDois[i]);
+            }
+        }
+    }
+
+    fprintf(arqDadosClinica," 26 -  50  %s", vencedor);
+
+}
+void exibeFaixaTres(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
+    int cont1 = 0, cont2 = 0;
+    char vencedor[dim] = " ";
+    for(int i = 0; i < pesquisa->contFaixaTres; i++){
+
+        if(!compStr(pesquisa->faixaTres[i], " ")){
+            for(int j = i + 1; j < pesquisa->contFaixaTres; j++){
+                if( compStr(pesquisa->faixaTres[i], pesquisa->faixaTres[j]) ) {
+                    cont1++;
+                    strcpy(pesquisa->faixaTres[j], " ");
+                }
+            }
+            if(cont1 > cont2){
+                cont2 = cont1;
+                strcpy(vencedor, pesquisa->faixaTres[i]);
+            }
+        }
+    }
+
+    fprintf(arqDadosClinica, " 51 -  75  %s", vencedor);
+
+}
+void exibeFaixaQuatro(agFaixaEtaria *pesquisa, FILE *arqDadosClinica){
+    int cont1 = 0, cont2 = 0;
+    char vencedor[dim] = " ";
+    for(int i = 0; i < pesquisa->contFaixaQuatro; i++){
+
+        if(!compStr(pesquisa->faixaQuatro[i], " ")){
+            for(int j = i + 1; j < pesquisa->contFaixaQuatro; j++){
+                if( compStr(pesquisa->faixaQuatro[i], pesquisa->faixaQuatro[j]) ) {
+                    cont1++;
+                    strcpy(pesquisa->faixaQuatro[j], " ");
+                }
+            }
+            if(cont1 > cont2){
+                cont2 = cont1;
+                strcpy(vencedor, pesquisa->faixaQuatro[i]);
+            }
+        }
+    }
+
+    fprintf(arqDadosClinica, " 76 - 100  %s", vencedor);
+
+}
+*/
