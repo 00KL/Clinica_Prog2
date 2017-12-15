@@ -152,13 +152,14 @@ void diasOcupados(agMedico *medico, FILE *arqMedico){
 }
 void nomeLista(char *nomeArq, int semana, char *nTeste){
 
-  char fimNome[5],nome[dim],numero[1];
+  char fimNome[5],nome[dim],numero[1],teste[5];
   //numero[0]=nTeste[0];
 
   //printf("%s TORTONA\n",nTeste);
   strcpy(fimNome, " .txt");
   fimNome[0] = semana + 48;
   //printf("%s TORTONA\n",fimNome);
+  strcpy(teste,fimNome);
 
   strcat(numero,nTeste);
   strcpy(nome,"entrada/Teste");
@@ -166,9 +167,10 @@ void nomeLista(char *nomeArq, int semana, char *nTeste){
   strcat(nome,numero);
   //printf("%s TOR\n",nome);
   strcat(nome,"/listaPacientesSemana");
-  strcat(nome,fimNome);
+  strcat(nome,teste);
+  strcpy(nomeArq,nome);
   printf("%s TOR\n",nome);
-  
+  //printf("%s TOR\n",teste);
 
 }
 
