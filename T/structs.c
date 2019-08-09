@@ -10,53 +10,32 @@ int compStr(char *, char *);
 typedef struct {
     char nome[dim];
     int id;
+
     char especialidade[dim];
-    int nConsultasSemana[4];
+
     int agenda[h][d];
     int consultas;
 } agMedico;
-
-typedef struct {
-  int dia;
-  int mes;
-  int ano;
-  int idade;
-} data;
 
 //Cliente
 typedef struct {
     char nome[dim];
     int id;
     char fone[dim];
-    data idade;
+    int idade;
     char medico[dim];
 } cliente;
 
 //Faixa etária
 typedef struct {
-    int faixa[4][4];
-    char especialidade[dim];
-} agFaixaEtariaVet;
+    char faixa[dim][dim];
+    int contFaixa;
 
-//Faixa etária
-typedef struct {
-    char faixaUm[dim][dim];
-    int contFaixaUm;
-
-    char faixaDois[dim][dim];
-    int contFaixaDois;
-
-    char faixaTres[dim][dim];
-    int contFaixaTres;
-
-    char faixaQuatro[dim][dim];
-    int contFaixaQuatro;
-  } agFaixaEtaria;
+} agFaixaEtaria;
 
 typedef struct{
   char especialidade[dim];
   int nEspecialidade;
-  int nConsultas[4];
 } esp;
 
 //N será necessário exibir para o usuário
